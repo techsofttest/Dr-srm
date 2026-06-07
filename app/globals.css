@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Design System: Deep Navy + White + Teal */
+@theme {
+  --color-deepNavy: #0B1B3D;
+  --color-navyLight: #142850;
+  --color-tealAccent: #0D9488;
+  --color-tealHover: #0F766E;
+  --color-bgLight: #F8FAFC;
+  --color-textDark: #1E293B;
+  --color-textLight: #F8FAFC;
+
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-playfair);
+}
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #1E293B;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling for anchor links & Prevent horizontal overflow */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
