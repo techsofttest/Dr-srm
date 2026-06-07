@@ -124,7 +124,7 @@ export default function AboutAndProcedures() {
                                 {/* Main image frame */}
                                 <div className="relative h-[500px] md:h-[580px] rounded-3xl overflow-hidden shadow-2xl">
                                     <Image
-                                        src="/hero-sec/soumya4.png"
+                                        src="/hero-sec/soumya-pr.png"
                                         alt="Dr. Soumya Ranjan Malla"
                                         fill
                                         className="object-cover object-top"
