@@ -25,7 +25,7 @@ export default function Experience() {
                         </p>
                         
                         <div className="flex flex-col gap-4 max-w-md">
-                            <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-slate-300 shadow-sm">
+                            <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white border border-slate-300">
                                 <div className="p-2.5 bg-tealAccent/10 text-tealAccent rounded-xl">
                                     <Building2 className="w-5 h-5" />
                                 </div>
@@ -45,7 +45,7 @@ export default function Experience() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="w-full max-w-2xl relative group flex flex-col bg-deepNavy rounded-3xl overflow-hidden shadow-xl border border-white/15 h-[400px] md:h-[450px]"
+                        className="w-full max-w-2xl relative group flex flex-col bg-deepNavy rounded-3xl overflow-hidden border border-white/20 h-[400px] md:h-[450px]"
                     >
                         {/* Background Image Container */}
                         <Image

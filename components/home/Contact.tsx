@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { Phone, MessageSquare, Mail, MapPin, Clock, AlertCircle, ArrowRight } from 'lucide-react';
+import WhatsAppIcon from '@/components/global/WhatsAppIcon';
+
 
 export default function Contact() {
     return (
@@ -111,8 +113,8 @@ export default function Contact() {
                             rel="noreferrer"
                             className="bg-bgLight/50 border border-slate-300 hover:border-tealAccent/40 hover:bg-bgLight rounded-2xl p-8 flex flex-col justify-between group transition-all duration-300 animate-none"
                         >
-                            <div className="p-3 bg-white border border-slate-300 text-tealAccent rounded-xl w-fit mb-8 group-hover:scale-105 transition-transform duration-300">
-                                <MessageSquare className="w-6 h-6" />
+                            <div className="p-3 bg-white border border-slate-300 text-emerald-500 rounded-xl w-fit mb-8 group-hover:scale-105 transition-transform duration-300">
+                                <WhatsAppIcon className="w-6 h-6" />
                             </div>
                             <div>
                                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">

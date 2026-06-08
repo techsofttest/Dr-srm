@@ -24,53 +24,55 @@ import {
     Home,
 } from 'lucide-react';
 import Button from '@/components/global/Button';
+import WhatsAppIcon from '@/components/global/WhatsAppIcon';
+
 
 // ── Navigation Data ───────────────────────────────────────────────────────────
 
 const layer2Nav = [
-    { name: 'Home',    href: '#home',    icon: Home },
-    { name: 'About',   href: '#about',   icon: UserRound },
+    { name: 'Home', href: '/#home', icon: Home },
+    { name: 'About', href: '/about', icon: UserRound },
     {
         name: 'Conditions',
-        href: '#conditions',
+        href: '/conditions',
         icon: HeartPulse,
         children: [
-            { name: 'Stroke & Cerebrovascular',  href: '#conditions' },
-            { name: 'Epilepsy & Seizures',        href: '#conditions' },
-            { name: 'Headache Disorders',         href: '#conditions' },
-            { name: 'Movement Disorders',         href: '#conditions' },
-            { name: 'Neurodegenerative Diseases', href: '#conditions' },
-            { name: 'Neuro-infections',           href: '#conditions' },
+            { name: 'Brain Aneurysms', href: '/conditions/brain-aneurysms' },
+            { name: 'Stroke Intervention', href: '/conditions/stroke-intervention' },
+            { name: 'Vascular Malformations', href: '/conditions/vascular-malformations' },
+            { name: 'Carotid Artery Disease', href: '/conditions/carotid-artery-disease' },
+            { name: 'Spinal Vascular Disorders', href: '/conditions/spinal-vascular-disorders' },
+            { name: 'Other Conditions', href: '/conditions/other-conditions' },
         ],
     },
     {
         name: 'Procedures',
-        href: '#procedures',
+        href: '/procedures',
         icon: Activity,
         children: [
-            { name: 'IV Thrombolysis (tPA)',        href: '#procedures' },
-            { name: 'Carotid Doppler Evaluation',   href: '#procedures' },
-            { name: 'Botox Therapy',                href: '#procedures' },
-            { name: 'Lumbar Puncture',              href: '#procedures' },
-            { name: 'EEG & Epilepsy Monitoring',    href: '#procedures' },
+            { name: 'Mechanical Thrombectomy', href: '/procedures/mechanical-thrombectomy' },
+            { name: 'Brain Aneurysm Treatment', href: '/procedures/brain-aneurysm-treatment' },
+            { name: 'AVM & dAVF Embolisation', href: '/procedures/avm-davf-embolisation' },
+            { name: 'Cerebrovascular Revascularisation', href: '/procedures/cerebrovascular-revascularisation' },
+            { name: 'Diagnostic Neurovascular Imaging', href: '/procedures/diagnostic-neurovascular-imaging' },
         ],
     },
 ];
 
 const layer3Nav = [
-    { name: 'Patient Education', href: '#patient-education', icon: BookOpen },
-    { name: 'Referring Doctors',  href: '#referring-doctors', icon: Stethoscope },
-    { name: 'Academic Profile',   href: '#academic-profile',  icon: GraduationCap },
-    { name: 'Testimonials',       href: '#testimonials',      icon: Users },
-    { name: 'Contact',            href: '#contact',           icon: MapPin },
+    { name: 'Patient Education', href: '/patient-education', icon: BookOpen },
+    { name: 'Referring Doctors', href: '/referring-doctors', icon: Stethoscope },
+    { name: 'Academic Profile', href: '/academic-profile', icon: GraduationCap },
+    { name: 'Testimonials', href: '/patient-stories', icon: Users },
+    { name: 'Contact', href: '/contact', icon: MapPin },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Header() {
-    const [isScrolled, setIsScrolled]       = useState(false);
-    const [mobileOpen, setMobileOpen]       = useState(false);
-    const [openDropdown, setOpenDropdown]   = useState<string | null>(null);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     useEffect(() => {
         const onScroll = () => setIsScrolled(window.scrollY > 30);
@@ -132,27 +134,27 @@ export default function Header() {
                             rel="noreferrer"
                             className="flex items-center gap-1.5 hover:text-tealAccent transition-colors"
                         >
-                            <MessageCircle className="w-3 h-3 text-green-400" />
+                            <WhatsAppIcon className="w-3.5 h-3.5 text-green-400" />
                             <span>WhatsApp</span>
                         </a>
 
-                        <span className="text-white/15">|</span>
+                        {/* <span className="text-white/15">|</span>
 
                         <Link
-                            href="#contact"
+                            href="/book-appointment"
                             className="flex items-center gap-1.5 hover:text-tealAccent transition-colors"
                         >
-                            <Calendar className="w-3 h-3 text-tealAccent" />
+                            <Calendar className="w-3.5 h-3.5 text-tealAccent" />
                             <span>Book Appointment</span>
-                        </Link>
+                        </Link> */}
 
                         <span className="text-white/15">|</span>
 
                         <Link
-                            href="#emergency-stroke"
+                            href="/#emergency-stroke"
                             className="flex items-center gap-1.5 text-red-400 hover:text-red-300 font-bold transition-colors"
                         >
-                            <Siren className="w-3 h-3 animate-pulse" />
+                            <Siren className="w-3.5 h-3.5 animate-pulse" />
                             <span>Emergency Stroke Referral</span>
                         </Link>
                     </div>
@@ -161,21 +163,28 @@ export default function Header() {
 
             {/* ── LAYER 2 · Logo + Primary Nav ────────────────────────────── */}
             <div
-                className={`relative z-10 w-full transition-all duration-300 border-b border-white/10 ${
-                    isScrolled
-                        ? 'bg-deepNavy/97 backdrop-blur-md shadow-xl py-2'
-                        : 'bg-deepNavy/90 backdrop-blur-sm py-3'
-                }`}
+                className={`relative z-10 w-full transition-all duration-300 border-b border-white/10 ${isScrolled
+                    ? 'bg-deepNavy/97 backdrop-blur-md py-2'
+                    : 'bg-deepNavy/90 backdrop-blur-sm py-3'
+                    }`}
             >
                 <div className="max-w-[1600px] mx-auto px-5 md:px-[80px] flex items-center justify-between gap-6">
                     {/* Logo */}
-                    <Link href="#home" className="shrink-0 z-10">
+                    <Link href="/" className="shrink-0 z-10">
                         <Image
                             src="/logo/logo.png"
                             alt="Dr. Soumya Ranjan Malla"
                             width={260}
                             height={72}
-                            className="w-auto h-12 md:h-[60px] object-contain brightness-0 invert"
+                            className="hidden md:block w-auto h-[60px] object-contain brightness-0 invert"
+                            priority
+                        />
+                        <Image
+                            src="/logo/logo-mob2.png"
+                            alt="Dr. Soumya Ranjan Malla"
+                            width={160}
+                            height={48}
+                            className="md:hidden w-auto h-12 object-contain"
                             priority
                         />
                     </Link>
@@ -185,17 +194,23 @@ export default function Header() {
                         {layer2Nav.map((item) => {
                             const hasChildren = !!item.children;
                             return (
-                                <div key={item.name} className="relative">
+                                <div
+                                    key={item.name}
+                                    className="relative group"
+                                    onMouseEnter={() => hasChildren && setOpenDropdown(item.name)}
+                                    onMouseLeave={() => hasChildren && setOpenDropdown(null)}
+                                >
                                     {hasChildren ? (
-                                        <button
-                                            onClick={(e) => toggleDropdown(e, item.name)}
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setOpenDropdown(null)}
                                             className="flex items-center gap-1.5 px-3 py-2 rounded-md hover:bg-white/5 hover:text-tealAccent transition-colors"
                                         >
                                             {item.name}
                                             <ChevronDown
-                                                className={`w-3 h-3 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`}
+                                                className={`w-3 h-3 transition-transform group-hover:rotate-180`}
                                             />
-                                        </button>
+                                        </Link>
                                     ) : (
                                         <Link
                                             href={item.href}
@@ -208,7 +223,7 @@ export default function Header() {
                                     {/* Dropdown */}
                                     {hasChildren && openDropdown === item.name && (
                                         <div
-                                            className="absolute top-full left-0 mt-1 w-52 bg-[#0a1628] border border-white/10 rounded-xl shadow-2xl py-2 z-50"
+                                            className="absolute top-full left-0 mt-1 w-52 bg-[#0a1628] border border-white/20 rounded-xl py-2 z-50"
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             {item.children!.map((child) => (
@@ -232,7 +247,7 @@ export default function Header() {
                     <div className="flex items-center gap-3">
                         <Button
                             variant="primary"
-                            href="#contact"
+                            href="/book-appointment"
                             className="hidden xl:inline-flex px-5 py-2.5 text-[11px] tracking-wider shrink-0"
                         >
                             <Calendar className="w-3.5 h-3.5" />
@@ -275,12 +290,30 @@ export default function Header() {
 
             {/* ── MOBILE DRAWER ────────────────────────────────────────────── */}
             <div
-                className={`fixed inset-x-0 top-0 bottom-0 bg-deepNavy z-40 transition-transform duration-300 xl:hidden ${
-                    mobileOpen ? 'translate-x-0' : 'translate-x-full'
-                } overflow-y-auto`}
-                style={{ paddingTop: '72px' }}
+                className={`fixed inset-0 bg-deepNavy z-50 transition-transform duration-300 xl:hidden ${mobileOpen ? 'translate-x-0' : 'translate-x-full'
+                    } overflow-y-auto`}
             >
-                <div className="flex flex-col h-full px-6 py-6">
+                <div className="flex flex-col h-full px-5 py-6">
+                    {/* Drawer Header */}
+                    <div className="flex items-center justify-between mb-8">
+                        <Link href="/" onClick={() => setMobileOpen(false)}>
+                            <Image
+                                src="/logo/logo-mob2.png"
+                                alt="Dr. Soumya Ranjan Malla"
+                                width={160}
+                                height={48}
+                                className="w-auto h-12 object-contain"
+                            />
+                        </Link>
+                        <button
+                            onClick={() => setMobileOpen(false)}
+                            className="p-2 -mr-2 text-white hover:text-tealAccent transition-colors"
+                            aria-label="Close Menu"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+
                     {/* All nav items combined for mobile */}
                     <nav className="flex flex-col gap-1 text-base font-medium text-white/90 mb-6">
                         {[...layer2Nav, ...layer3Nav].map((item) => {
@@ -289,15 +322,23 @@ export default function Header() {
                                 <div key={item.name}>
                                     {hasChildren ? (
                                         <>
-                                            <button
-                                                onClick={(e) => toggleDropdown(e, item.name + '_mob')}
-                                                className="w-full flex items-center justify-between gap-2 py-3 border-b border-white/5 hover:text-tealAccent transition-colors"
-                                            >
-                                                <span>{item.name}</span>
-                                                <ChevronDown
-                                                    className={`w-4 h-4 transition-transform ${openDropdown === item.name + '_mob' ? 'rotate-180' : ''}`}
-                                                />
-                                            </button>
+                                            <div className="w-full flex items-center justify-between gap-2 border-b border-white/5">
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={() => setMobileOpen(false)}
+                                                    className="flex-1 py-3 hover:text-tealAccent transition-colors"
+                                                >
+                                                    {item.name}
+                                                </Link>
+                                                <button
+                                                    onClick={(e) => toggleDropdown(e, item.name + '_mob')}
+                                                    className="p-3 -mr-3 text-white/60 hover:text-tealAccent transition-colors"
+                                                >
+                                                    <ChevronDown
+                                                        className={`w-4 h-4 transition-transform ${openDropdown === item.name + '_mob' ? 'rotate-180' : ''}`}
+                                                    />
+                                                </button>
+                                            </div>
                                             {openDropdown === item.name + '_mob' && (
                                                 <div className="pl-6 flex flex-col gap-1 py-2">
                                                     {(item as typeof layer2Nav[2]).children!.map((child) => (
@@ -342,21 +383,21 @@ export default function Header() {
                             rel="noreferrer"
                             className="flex items-center justify-center gap-2.5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm transition-colors border border-white/10"
                         >
-                            <MessageCircle className="w-4 h-4 text-green-400" />
+                            <WhatsAppIcon className="w-4 h-4 text-green-400" />
                             WhatsApp Enquiry
                         </a>
                         <Button
                             variant="primary"
-                            href="#contact"
+                            href="/book-appointment"
                             onClick={() => setMobileOpen(false)}
-                            className="w-full"
+                            className="w-full py-2 text-sm"
                         >
                             <Calendar className="w-4 h-4" />
                             <span>Book Consultation</span>
                         </Button>
                         <Button
                             variant="danger"
-                            href="#emergency-stroke"
+                            href="/#emergency-stroke"
                             onClick={() => setMobileOpen(false)}
                             className="w-full"
                         >

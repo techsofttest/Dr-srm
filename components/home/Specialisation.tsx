@@ -125,9 +125,9 @@ export default function Specialisation() {
                                 key={index}
                                 className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] lg:flex-[0_0_25%] pl-6"
                             >
-                                <div className="h-full relative flex flex-col bg-zinc-50 border border-zinc-200 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group p-8">
+                                <div className="h-full relative flex flex-col bg-zinc-50 border border-zinc-200 hover:border-drBlack rounded-xl overflow-hidden transition-all duration-300 group p-8">
                                     {/* Icon Container */}
-                                    <div className="mb-6 w-14 h-14 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-drBlack group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                                    <div className="mb-6 w-14 h-14 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-drBlack group-hover:scale-110 group-hover:border-drBlack/30 transition-all duration-300">
                                         <spec.icon className="w-7 h-7" />
                                     </div>
 

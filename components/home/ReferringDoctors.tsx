@@ -61,7 +61,7 @@ export default function ReferringDoctors() {
                         </div>
 
                         {/* Dedicated Hotline Callout Card */}
-                        <div className="bg-gradient-to-br from-red-950/40 to-red-900/10 border border-red-500/40 rounded-3xl p-8 shadow-lg shadow-red-950/20 hover:border-red-500/50 transition-all duration-300">
+                        <div className="bg-gradient-to-br from-red-950/40 to-red-900/10 border border-red-500/40 rounded-3xl p-8 hover:border-red-500/50 transition-all duration-300">
                             <h4 className="text-xs font-bold text-red-400 uppercase tracking-widest mb-2 flex items-center gap-2 animate-pulse">
                                 <ShieldAlert className="w-4 h-4 text-red-400" />
                                 <span>Dedicated Referral Line</span>

@@ -156,11 +156,11 @@ export default function Button({
     };
 
     const standardVariants = {
-        primary: "bg-tealAccent border-tealAccent hover:bg-tealHover hover:border-tealHover text-white shadow-md hover:shadow-tealAccent/20 hover:scale-[1.02]",
+        primary: "bg-tealAccent border-tealAccent hover:bg-tealHover hover:border-tealHover text-white hover:scale-[1.02]",
         secondary: "bg-transparent border-slate-300 text-deepNavy hover:border-tealAccent/50 hover:text-tealAccent hover:bg-tealAccent/5 hover:scale-[1.02]",
         'outline-white': "bg-transparent border-white/20 text-white hover:bg-white/10 hover:border-white/40 hover:scale-[1.02]",
-        danger: "bg-red-700 border-red-700 hover:bg-red-600 hover:border-red-600 text-white shadow-md hover:shadow-red-700/20 hover:scale-[1.02]",
-        'danger-white': "bg-white border-white text-red-800 hover:bg-red-50 hover:border-red-50 shadow-md hover:shadow-white/15 hover:scale-[1.02]"
+        danger: "bg-red-700 border-red-700 hover:bg-red-600 hover:border-red-600 text-white hover:scale-[1.02]",
+        'danger-white': "bg-white border-slate-300 text-red-800 hover:bg-red-50 hover:border-red-50 hover:scale-[1.02]"
     };
 
     const currentVariants = layout === 'box' ? boxVariants : standardVariants;

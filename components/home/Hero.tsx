@@ -50,12 +50,12 @@ export default function Hero() {
                     </p>
 
                     {/* Three-Button CTA Layout — Boxed, Full-Width, Animated */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 w-full gap-0 overflow-hidden rounded-xl border border-slate-300 shadow-xl shadow-slate-100/50 mt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 w-full gap-0 overflow-hidden rounded-xl border border-slate-300 mt-2">
                         {/* Button 1 — Book Consultation */}
                         <Button
                             variant="primary"
                             layout="box"
-                            href="#contact"
+                            href="/book-appointment"
                             className="py-5"
                         >
                             <Calendar className="w-5 h-5 text-white transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />

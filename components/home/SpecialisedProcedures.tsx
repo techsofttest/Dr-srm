@@ -8,25 +8,25 @@ import { motion } from 'framer-motion';
 
 // Nodes: [x%, y%] positions in the SVG viewBox (0–100 × 0–100)
 const NODES: [number, number][] = [
-    [8,  8],  [25,  4],  [44,  7],  [62,  3],  [80, 10],  [94,  6],
-    [5,  30], [22, 25],  [40, 22],  [57, 28],  [74, 20],  [92, 30],
-    [10, 50], [28, 48],  [50, 45],  [66, 52],  [85, 48],
-    [15, 70], [38, 65],  [55, 72],  [76, 68],  [93, 72],
-    [22, 88], [50, 90],  [72, 88],  [90, 92],
+    [8, 8], [25, 4], [44, 7], [62, 3], [80, 10], [94, 6],
+    [5, 30], [22, 25], [40, 22], [57, 28], [74, 20], [92, 30],
+    [10, 50], [28, 48], [50, 45], [66, 52], [85, 48],
+    [15, 70], [38, 65], [55, 72], [76, 68], [93, 72],
+    [22, 88], [50, 90], [72, 88], [90, 92],
 ];
 
 // Edges: pairs of node indices
 const EDGES: [number, number][] = [
-    [0,1],[1,2],[2,3],[3,4],[4,5],
-    [0,6],[1,7],[2,8],[3,9],[4,10],[5,11],
-    [6,7],[7,8],[8,9],[9,10],[10,11],
-    [6,12],[7,13],[8,14],[9,15],[10,16],
-    [12,13],[13,14],[14,15],[15,16],
-    [12,17],[13,18],[14,19],[15,20],[16,21],
-    [17,18],[18,19],[19,20],[20,21],
-    [17,22],[18,23],[19,24],[20,25],[21,25],
-    [22,23],[23,24],[24,25],
-    [7,2],[9,4],[13,8],[15,10],[18,14],[20,16],
+    [0, 1], [1, 2], [2, 3], [3, 4], [4, 5],
+    [0, 6], [1, 7], [2, 8], [3, 9], [4, 10], [5, 11],
+    [6, 7], [7, 8], [8, 9], [9, 10], [10, 11],
+    [6, 12], [7, 13], [8, 14], [9, 15], [10, 16],
+    [12, 13], [13, 14], [14, 15], [15, 16],
+    [12, 17], [13, 18], [14, 19], [15, 20], [16, 21],
+    [17, 18], [18, 19], [19, 20], [20, 21],
+    [17, 22], [18, 23], [19, 24], [20, 25], [21, 25],
+    [22, 23], [23, 24], [24, 25],
+    [7, 2], [9, 4], [13, 8], [15, 10], [18, 14], [20, 16],
 ];
 
 function NeuralNetworkBg() {
@@ -43,8 +43,8 @@ function NeuralNetworkBg() {
                 const [x1, y1] = NODES[a];
                 const [x2, y2] = NODES[b];
                 const pathD = `M${x1},${y1} L${x2},${y2}`;
-                const len   = Math.hypot(x2 - x1, y2 - y1);
-                const dur   = 2.5 + (i % 5) * 0.8; // 2.5s – 6.5s
+                const len = Math.hypot(x2 - x1, y2 - y1);
+                const dur = 2.5 + (i % 5) * 0.8; // 2.5s – 6.5s
                 const delay = (i % 9) * 0.6;        // 0s – 4.8s
 
                 return (
@@ -82,7 +82,7 @@ function NeuralNetworkBg() {
             {/* ── Nodes ── */}
             {NODES.map(([x, y], i) => {
                 const pulseDur = 2 + (i % 5) * 0.4;
-                const delay    = (i % 7) * 0.35;
+                const delay = (i % 7) * 0.35;
                 return (
                     <g key={`n-${i}`}>
                         {/* Glow ring */}
@@ -130,7 +130,7 @@ const procedures = [
     {
         title: "Mechanical Thrombectomy",
         icon: Brain,
-        description: "Rapid, life-saving clot retrieval for acute ischaemic stroke using advanced endovascular techniques.",
+        description: "Rapid clot retrieval for acute ischaemic stroke using aspiration and stent-retriever techniques.",
         techniques: [
             "Aspiration Thrombectomy (ADAPT technique)",
             "Stent-Retriever Clot Extraction",
@@ -143,12 +143,12 @@ const procedures = [
         icon: Heart,
         description: "Minimally invasive reconstruction and occlusion of ruptured and unruptured intracranial aneurysms.",
         techniques: [
-            "Simple Endovascular Coiling",
+            "Simple Coiling",
             "Balloon-Assisted Coiling",
             "Stent-Assisted Coiling",
-            "Flow Diversion (Pipeline, Surpass, etc.)",
+            "Flow Diversion",
             "Parent Vessel Reconstruction",
-            "Complex Aneurysm Occlusion"
+            "Complex Aneurysm Treatment"
         ]
     },
     {
@@ -158,10 +158,10 @@ const procedures = [
         techniques: [
             "Cerebral AVM Embolisation",
             "Cranial dAVF Embolisation",
-            "Carotid-Cavernous Fistula (CCF) Embolisation",
+            "Carotid-Cavernous Fistula Embolisation",
             "Spinal dAVF Embolisation",
             "Head & Neck Vascular Malformation Embolisation",
-            "Pre-operative Tumor Embolisation"
+            "Pre-operative Embolisation"
         ]
     },
     {
@@ -169,9 +169,9 @@ const procedures = [
         icon: ShieldCheck,
         description: "Endovascular stenting and angioplasty to prevent stroke and restore cerebral blood flow.",
         techniques: [
-            "Carotid Artery Stenting (CAS)",
-            "Intracranial Balloon Angioplasty",
-            "Intracranial Atherosclerotic Stenting",
+            "Carotid Artery Stenting",
+            "Intracranial Angioplasty",
+            "Intracranial Stenting",
             "Cerebral Perfusion Assessment",
             "Stroke Prevention Consultation"
         ]
@@ -181,11 +181,13 @@ const procedures = [
         icon: Microscope,
         description: "Advanced diagnostic assessments utilizing state-of-the-art angiography and neuroimaging protocols.",
         techniques: [
-            "Diagnostic Cerebral Angiography (DSA)",
-            "Diagnostic Spinal Angiography",
-            "CT Angiography & Perfusion Review",
-            "MR Angiography & Vessel Wall Imaging",
-            "Advanced MRI Interpretation & AI-supported review"
+            "Cerebral Angiography",
+            "Spinal Angiography",
+            "CT Angiography",
+            "MR Angiography",
+            "Vessel Wall Imaging",
+            "Perfusion Imaging",
+            "Advanced MRI Interpretation"
         ]
     }
 ];

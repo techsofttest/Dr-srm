@@ -77,7 +77,7 @@ export default function Education() {
                     <div className="lg:col-span-2 flex flex-col gap-6">
                         
                         {/* Cell A: Header + Timeline */}
-                        <div className="border border-slate-200 rounded-2xl p-8 md:p-10 bg-white shadow-sm flex flex-col">
+                        <div className="border border-slate-200 rounded-2xl p-8 md:p-10 bg-white flex flex-col">
                             <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                                 <span className="w-12 h-[1px] bg-tealAccent" />
                                 Academic Pedigree
@@ -97,7 +97,7 @@ export default function Education() {
                                 />
                                 {education.map((edu, idx) => (
                                     <div key={idx} className="relative">
-                                        <div className="absolute -left-10 top-1 w-4 h-4 rounded-full bg-white border-4 border-tealAccent shadow-sm z-10" />
+                                        <div className="absolute -left-10 top-1 w-4 h-4 rounded-full bg-white border-4 border-tealAccent z-10" />
                                         <div className="text-xs font-bold text-tealAccent tracking-wider mb-1">{edu.years}</div>
                                         <h4 className="text-xl sm:text-2xl font-serif font-bold text-deepNavy mb-1">{edu.degree}</h4>
                                         <p className="text-sm text-slate-500 font-medium mb-2">{edu.institution}</p>
@@ -110,8 +110,8 @@ export default function Education() {
                         {/* Observerships Row */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {/* Observership 1 */}
-                            <div className="border border-slate-200 rounded-2xl p-6 flex gap-4 items-start bg-white shadow-sm hover:border-tealAccent/30 transition-all duration-300">
-                                <div className="p-2.5 bg-bgLight rounded-xl text-tealAccent h-fit shadow-sm flex-shrink-0">
+                            <div className="border border-slate-200 rounded-2xl p-6 flex gap-4 items-start bg-white hover:border-tealAccent transition-all duration-300">
+                                <div className="p-2.5 bg-bgLight rounded-xl text-tealAccent h-fit flex-shrink-0">
                                     <Award className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -122,8 +122,8 @@ export default function Education() {
                             </div>
 
                             {/* Observership 2 */}
-                            <div className="border border-slate-200 rounded-2xl p-6 flex gap-4 items-start bg-white shadow-sm hover:border-tealAccent/30 transition-all duration-300">
-                                <div className="p-2.5 bg-bgLight rounded-xl text-tealAccent h-fit shadow-sm flex-shrink-0">
+                            <div className="border border-slate-200 rounded-2xl p-6 flex gap-4 items-start bg-white hover:border-tealAccent transition-all duration-300">
+                                <div className="p-2.5 bg-bgLight rounded-xl text-tealAccent h-fit flex-shrink-0">
                                     <Award className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -139,7 +139,7 @@ export default function Education() {
                     <div className="lg:col-span-1 flex flex-col gap-6">
                         
                         {/* Cell B: Professional Affiliations */}
-                        <div className="border border-slate-200 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+                        <div className="border border-slate-200 rounded-2xl overflow-hidden flex-shrink-0">
                             <div className="bg-deepNavy text-white p-8 md:p-10 relative overflow-hidden">
                                 <div className="absolute -right-20 -top-20 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
                                 <h4 className="text-xs font-bold tracking-widest text-tealAccent uppercase mb-2">Credentials</h4>
@@ -172,7 +172,7 @@ export default function Education() {
                         </div>
 
                         {/* Cell C: Portrait */}
-                        <div className="border border-slate-200 rounded-2xl overflow-hidden relative flex-1 min-h-[350px] w-full shadow-sm">
+                        <div className="border border-slate-200 rounded-2xl overflow-hidden relative flex-1 min-h-[350px] w-full">
                             <Image
                                 src="/hero-sec/soumya5.PNG"
                                 alt="Dr. Soumya Ranjan Malla"

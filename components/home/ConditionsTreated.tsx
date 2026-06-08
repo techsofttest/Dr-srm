@@ -23,12 +23,12 @@ const categories = [
     },
     {
         title: 'AVM & dAVF Treatment',
-        subtitle: 'Vascular Malformations',
+        subtitle: 'AVM & dAVF Treatment in Kerala',
         image: '/conditions/avm.png',
         items: [
-            { name: 'Arteriovenous Malformations (AVMs)',   description: 'Advanced embolisation strategies for cerebral and spinal AVMs.' },
+            { name: 'Arteriovenous Malformations (AVMs)', description: 'Advanced embolisation strategies for cerebral and spinal AVMs.' },
             { name: 'Dural Arteriovenous Fistulas (dAVFs)', description: 'Diagnosis and treatment of cranial and spinal vascular fistulas.' },
-            { name: 'Carotid-Cavernous Fistulas',           description: 'Endovascular treatment of traumatic and spontaneous fistulas.' },
+            { name: 'Carotid-Cavernous Fistulas', description: 'Endovascular treatment of traumatic and spontaneous fistulas.' },
         ],
     },
     {
@@ -36,7 +36,7 @@ const categories = [
         subtitle: 'Carotid Artery Stenting in Kochi',
         image: '/conditions/carotid.png',
         items: [
-            { name: 'Carotid Artery Disease',              description: 'Stroke prevention through carotid artery stenting and cerebrovascular revascularisation.' },
+            { name: 'Carotid Artery Disease', description: 'Stroke prevention through carotid artery stenting and cerebrovascular revascularisation.' },
             { name: 'Intracranial Atherosclerotic Disease', description: 'Endovascular management of symptomatic intracranial stenosis.' },
         ],
     },
@@ -45,8 +45,8 @@ const categories = [
         subtitle: 'Advanced Spine & Skull Base',
         image: '/conditions/spinal.png',
         items: [
-            { name: 'Spinal Vascular Disorders',     description: 'Treatment of spinal dAVFs, spinal AVMs and other vascular pathologies affecting the spinal cord.' },
-            { name: 'Pulsatile Tinnitus',            description: 'Comprehensive neurovascular evaluation for vascular causes of tinnitus.' },
+            { name: 'Spinal Vascular Disorders', description: 'Treatment of spinal dAVFs, spinal AVMs and other vascular pathologies affecting the spinal cord.' },
+            { name: 'Pulsatile Tinnitus', description: 'Comprehensive neurovascular evaluation for vascular causes of tinnitus.' },
             { name: 'Unexplained Brain Haemorrhage', description: 'Advanced angiographic assessment for occult cerebrovascular pathology.' },
         ],
     },
@@ -56,8 +56,8 @@ const categories = [
         image: '/conditions/venous.png',
         items: [
             { name: 'Idiopathic Intracranial Hypertension', description: 'Evaluation and venous sinus intervention when indicated.' },
-            { name: 'Spontaneous Intracranial Hypotension',  description: 'Diagnosis and image-guided treatment strategies.' },
-            { name: 'Chronic Subdural Haematoma',            description: 'MMA embolisation and multidisciplinary management.' },
+            { name: 'Spontaneous Intracranial Hypotension', description: 'Diagnosis and image-guided treatment strategies.' },
+            { name: 'Chronic Subdural Haematoma', description: 'MMA embolisation and multidisciplinary management.' },
         ],
     },
 ];

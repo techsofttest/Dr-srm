@@ -122,7 +122,7 @@ export default function AboutAndProcedures() {
                         >
                             <div className="relative">
                                 {/* Main image frame */}
-                                <div className="relative h-[500px] md:h-[580px] rounded-3xl overflow-hidden shadow-2xl">
+                                <div className="relative h-[500px] md:h-[580px] rounded-3xl overflow-hidden border border-slate-200">
                                     <Image
                                         src="/hero-sec/soumya-pr.jpg"
                                         alt="Dr. Soumya Ranjan Malla"
@@ -231,7 +231,7 @@ export default function AboutAndProcedures() {
 
                             <Button
                                 variant="primary"
-                                href="#contact"
+                                href="/book-appointment"
                             >
                                 Book a Consultation
                                 <ArrowRight className="w-4 h-4" />

@@ -56,7 +56,7 @@ export default function EmergencyBanner() {
                                     repeatDelay: 2.5,
                                 }}
                             >
-                                <ShieldAlert className="w-6 h-6 text-white drop-shadow-[0_0_6px_rgba(255,80,80,0.9)]" />
+                                <ShieldAlert className="w-6 h-6 text-white" />
                             </motion.div>
                         </div>
 

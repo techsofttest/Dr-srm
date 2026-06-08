@@ -6,14 +6,14 @@ import Image from 'next/image';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const footerNavLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Conditions Treated', href: '#conditions' },
-    { name: 'Procedures', href: '#procedures' },
-    { name: 'Patient Education', href: '#patient-education' },
-    { name: 'For Referring Doctors', href: '#referring-doctors' },
-    { name: 'Academic Profile', href: '#academic-profile' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Conditions Treated', href: '/conditions' },
+    { name: 'Procedures', href: '/#procedures' },
+    { name: 'Patient Education', href: '/patient-education' },
+    { name: 'For Referring Doctors', href: '/referring-doctors' },
+    { name: 'Academic Profile', href: '/academic-profile' },
+    { name: 'Contact', href: '/contact' },
 ];
 
 export default function Footer() {
@@ -58,7 +58,7 @@ export default function Footer() {
                         <p className="text-sm text-white/70 leading-relaxed">
                             Providing advanced minimally invasive endovascular treatment for stroke, brain aneurysms, and complex neurovascular conditions.
                         </p>
-                        
+
                         {/* Emergency Services Badge */}
                         <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200 font-bold text-xs uppercase tracking-wider w-fit animate-pulse">
                             <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
