@@ -2,10 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import PatientEducationClient from './PatientEducationClient';
 
-export const metadata: Metadata = {
-    title: "Patient Education Centre | Dr. Soumya Ranjan Malla",
-    description: "Learn about stroke warning signs, mechanical thrombectomy, brain aneurysms, AVMs, and dAVFs. Access clinical guides, videos, and articles by Dr. Soumya Ranjan Malla, Interventional Neuroradiologist in Kochi.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/patienteducation`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 export default function PatientEducationPage() {
     return (

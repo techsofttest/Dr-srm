@@ -2,10 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import BookAppointmentClient from '@/components/global/BookAppointmentClient';
 
-export const metadata: Metadata = {
-    title: "Book an Appointment | Dr. Soumya Ranjan Malla",
-    description: "Schedule a consultation with Dr. Soumya Ranjan Malla, Interventional Neuroradiologist in Kochi. Book a clinic visit or online review of your medical reports.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/book-appointment`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Book Appointment',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 export default function BookAppointmentPage() {
     return (

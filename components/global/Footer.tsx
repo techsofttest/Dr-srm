@@ -1,10 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
+interface FooterData {
+    contact: {
+        place: string;
+        address: string;
+        location: string;
+        phone: string;
+        email: string;
+        linkedin: string;
+        orcid: string;
+    };
+    conditions: { name: string; slug: string }[];
+    procedure: { name: string; slug: string }[];
+}
 const footerNavLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
@@ -17,6 +30,16 @@ const footerNavLinks = [
 ];
 
 export default function Footer() {
+    const [data, setData] = useState<FooterData | null>(null);
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/layout`) // Ensure this matches your route
+            .then((res) => res.json())
+            .then(setData)
+            .catch(console.error);
+    }, []);
+
+    if (!data) return null;
     return (
         <footer className="relative w-full bg-deepNavy text-white px-5 md:px-[80px] pt-20 pb-10 overflow-hidden border-t border-navyLight">
             <div className="relative z-10 max-w-[1600px] mx-auto">
@@ -24,20 +47,10 @@ export default function Footer() {
                 <div className="w-full py-4 border-b border-white/10 mb-12 flex flex-wrap items-center justify-between gap-4 text-xs md:text-sm font-medium text-white/70">
                     <span className="text-tealAccent font-bold uppercase tracking-wider">Areas of Focus:</span>
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
-                        {[
-                            'Stroke Intervention',
-                            'Brain Aneurysms',
-                            'AVMs',
-                            'dAVFs',
-                            'Carotid Disease',
-                            'Cerebral Angiography',
-                            'Spinal Vascular Disorders',
-                            'Neurovascular Imaging Review'
-                        ].map((focus, idx) => (
-                            <span key={idx} className="flex items-center gap-2">
-                                {idx > 0 && <span className="text-white/20">•</span>}
-                                <span>{focus}</span>
-                            </span>
+                      {[...data.conditions, ...data.procedure].map((item, idx) => (
+                            <Link key={idx} href={`/${item.slug}`} className="hover:text-tealAccent transition-colors">
+                                {item.name}
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -92,13 +105,22 @@ export default function Footer() {
                         <div className="flex flex-col gap-4 text-sm text-white/70">
                             <div className="leading-relaxed flex items-start gap-2">
                                 <MapPin className="w-4 h-4 text-tealAccent shrink-0 mt-1" />
-                                <span>
-                                    <strong className="text-white block font-medium">Renai Medicity</strong>
-                                    Department of Neurology & Behavioural Sciences, Palarivattom, Kochi, Kerala, India
-                                </span>
+                                
+                                     <div className="text-white/70">
+                                        {/* The Bold Header */}
+                                        <strong className="text-white block font-medium">
+                                            {data.contact.place}
+                                        </strong>
+                                        
+                                        {/* The Remaining Address */}
+                                        <span className="text-sm font-light leading-relaxed">
+                                            {data.contact.address.replace(data.contact.place, '').trim()}
+                                        </span>
+                                    </div>
+                                
                             </div>
                             <a
-                                href="https://maps.google.com/?q=Renai+Medicity+Kochi"
+                                href={data.contact?.location}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-tealAccent uppercase hover:underline underline-offset-4 mt-1"
@@ -114,17 +136,17 @@ export default function Footer() {
                             Contact Info
                         </h4>
                         <div className="flex flex-col gap-4 text-sm">
-                            <a href="tel:+919629997812" className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors">
+                            <a href={`tel:${data.contact.phone}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors">
                                 <Phone className="w-4 h-4 text-tealAccent shrink-0" />
-                                <span>+91 9629997812</span>
+                                <span>{data.contact.phone}</span>
                             </a>
-                            <a href="mailto:drsoumyaranjanrd@gmail.com" className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors break-all">
+                            <a href={`mailto:${data.contact.email}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors break-all">
                                 <Mail className="w-4 h-4 text-tealAccent shrink-0" />
-                                <span>drsoumyaranjanrd@gmail.com</span>
+                                <span>{data.contact.email}</span>
                             </a>
                             <div className="flex gap-4 mt-2">
                                 <a
-                                    href="https://www.linkedin.com/in/soumyaranjanmalla"
+                                    href={data.contact.linkedin}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="text-xs font-bold tracking-wider text-white/60 hover:text-white uppercase transition-colors"
@@ -133,7 +155,7 @@ export default function Footer() {
                                 </a>
                                 <span className="text-white/20">|</span>
                                 <a
-                                    href="https://orcid.org/0000-0002-5541-1582"
+                                    href={data.contact.orcid}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="text-xs font-bold tracking-wider text-white/60 hover:text-white uppercase transition-colors"

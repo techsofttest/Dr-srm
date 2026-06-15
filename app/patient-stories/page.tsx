@@ -2,10 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import PatientStoriesClient from './PatientStoriesClient';
 
-export const metadata: Metadata = {
-    title: "Patient Stories & Clinical Outcomes | Dr. Soumya Ranjan Malla",
-    description: "Read verified case reviews and patient stories for Dr. Soumya Ranjan Malla, Interventional Neuroradiologist in Kochi. Clinical outcomes for stroke mechanical thrombectomy, complex aneurysm diversion, and subdural haematoma MMA embolisation.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/testimony`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 export default function PatientStoriesPage() {
     return (

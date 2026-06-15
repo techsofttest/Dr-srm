@@ -1,9 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
+interface TopicData{
+    type:string,
+    title:string,
+    content:string,
+    href:string,
+}
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
         viewBox="0 0 24 24"
@@ -15,46 +21,27 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-const topics = [
-    {
-        title: "Stroke: Every Minute Matters",
-        description: "Recognizing early stroke warning signs, stroke risk factors, and immediate action protocols.",
-        type: "Infographic & Guide",
-        href: "/conditions/stroke-intervention",
-    },
-    {
-        title: "What is Mechanical Thrombectomy?",
-        description: "A patient-friendly breakdown of how interventional devices retrieve blood clots from brain arteries.",
-        type: "Video Walkthrough",
-        href: "/procedures/mechanical-thrombectomy",
-    },
-    {
-        title: "Brain Aneurysm: Symptoms & Treatments",
-        description: "Understanding ruptured and unruptured aneurysms, coiling, flow diversion, and post-procedure recovery.",
-        type: "Patient Guide",
-        href: "/conditions/brain-aneurysms",
-    },
-    {
-        title: "Can Carotid Blockage Cause Stroke?",
-        description: "A look at carotid artery disease, plaque buildup, and the role of carotid stenting in stroke prevention.",
-        type: "Educational Article",
-        href: "/conditions/carotid-artery-disease",
-    },
-    {
-        title: "Understanding AVMs & dAVFs",
-        description: "Explaining brain and spinal vascular malformations, symptoms, and contemporary endovascular embolisation.",
-        type: "Patient Guide",
-        href: "/conditions/vascular-malformations",
-    },
-    {
-        title: "Cerebral Angiography: What to Expect",
-        description: "Detailed pre-procedure instructions, what happens during the diagnostic angiogram, and post-procedure care.",
-        type: "FAQ & Guide",
-        href: "/procedures/diagnostic-neurovascular-imaging",
-    }
-];
-
 export default function PatientEducation() {
+    const [topics, setTopics] = useState<TopicData[]>([]);
+    const [loading, setLoading] = useState(true);
+
+     useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
+            .then(res => res.json())
+            .then(data => {
+                // Check if the data object has the 'casestudy' key
+                if (data.topics) {
+                    setTopics(data.topics);
+                } else {
+                    console.error("The 'casestudy' key was not found in the API response.");
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch:", err);
+                setLoading(false);
+            });
+    }, []);
     return (
         <section id="patient-education" className="relative w-full py-24 bg-bgLight px-5 md:px-[80px] border-b border-slate-200">
             <div className="max-w-[1600px] mx-auto">
@@ -104,7 +91,7 @@ export default function PatientEducation() {
                                             {topic.title}
                                         </h4>
                                         <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-light">
-                                            {topic.description}
+                                            {topic.content}
                                         </p>
                                     </div>
 

@@ -1,28 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ShieldCheck, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-const caseStudies = [
-    {
-        title: "Acute Stroke Thrombectomy",
-        patient: "68-year-old Gentleman",
-        description: "Presented with sudden right-sided weakness and speech difficulty. Advanced imaging identified a large vessel occlusion. Emergency mechanical thrombectomy restored blood flow, resulting in meaningful neurological improvement and functional recovery."
-    },
-    {
-        title: "Complex Brain Aneurysm",
-        patient: "Middle-aged Woman",
-        description: "Presented with an incidentally detected complex aneurysm. Underwent endovascular flow diversion, successfully reconstructing the parent vessel and avoiding open cranial surgery."
-    },
-    {
-        title: "Recurrent Chronic Subdural Haematoma",
-        patient: "Elderly Patient",
-        description: "Presented with recurrent chronic subdural haematoma despite prior surgery. Underwent MMA (Middle Meningeal Artery) embolisation as part of multidisciplinary care, reducing recurrence risk and avoiding repeated operations."
-    }
-];
+interface caseStudies{
+    sub_title:string,
+    title:string,
+    description:string,
+    patient:string,
+}
 
 const googleReviews = [
     {
@@ -101,6 +90,26 @@ export default function Testimonials() {
         window.addEventListener('resize', checkScroll);
         return () => window.removeEventListener('resize', checkScroll);
     }, []);
+    const [casestudy, setcaseStudies] = useState<caseStudies[]>([]);
+    const [loading, setLoading] = useState(true);
+    
+        useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
+            .then(res => res.json())
+            .then(data => {
+                // Check if the data object has the 'casestudy' key
+                if (data.casestudy) {
+                    setcaseStudies(data.casestudy);
+                } else {
+                    console.error("The 'casestudy' key was not found in the API response.");
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch:", err);
+                setLoading(false);
+            });
+    }, []);
 
     return (
         <section id="patient-outcomes" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
@@ -156,7 +165,7 @@ export default function Testimonials() {
                             </div>
                         </div>
 
-                        {caseStudies.map((study, idx) => (
+                        {casestudy.map((study, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }}
@@ -167,7 +176,7 @@ export default function Testimonials() {
                             >
                                 <div>
                                     <span className="inline-block bg-tealAccent/15 text-tealAccent text-xs font-bold px-3 py-1 rounded-md mb-4 uppercase tracking-wider">
-                                        Case Study
+                                        {study.sub_title}
                                     </span>
                                     <h4 className="text-lg sm:text-xl font-serif font-bold text-deepNavy mb-1">
                                         {study.title}

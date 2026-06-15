@@ -1,17 +1,39 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     Brain, ShieldAlert, HeartPulse, Activity, Zap, HelpCircle, ArrowUpRight,
 } from 'lucide-react';
 import Link from 'next/link';
-import { conditions } from '@/data/clinicalContent';
 
-const iconMap: Record<string, React.ElementType> = {
-    Brain, ShieldAlert, HeartPulse, Activity, Zap, HelpCircle,
-};
+interface ServiceCategory {
+    id: number;
+    slug: string;
+    listingTitle: string;
+    listingSubtitle: string;
+    listingDescription: string; // Used in place of 'items'
+    image: string;
+    listingActionText: string;
+}
+
 
 export default function ConditionsGrid() {
+      const [condition, setCategories] = useState<ServiceCategory[]>([]);
+    
+        useEffect(() => {
+            async function fetchServices() {
+                try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/condition`);
+                    const data = await res.json();
+                    if (data.condition && Array.isArray(data.condition)) {
+                        setCategories(data.condition);
+                    }
+                } catch (err) {
+                    console.error("Error fetching condition:", err);
+                }
+            }
+            fetchServices();
+        }, []);
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
             {/* Background Saturated Radial Gradients & Spheres */}
@@ -25,8 +47,8 @@ export default function ConditionsGrid() {
             <div className="relative z-10 max-w-[1600px] mx-auto">
                 {/* Grid Layout */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {conditions.map((cond) => {
-                        const IconComp = iconMap[cond.iconName] ?? ShieldAlert;
+                    {condition.map((cond) => {
+                       
                         return (
                             <div
                                 key={cond.slug}
@@ -44,10 +66,7 @@ export default function ConditionsGrid() {
                                         {/* Subtle overlay */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#060f22]/20 to-transparent" />
 
-                                        {/* Icon Floating */}
-                                        <div className="absolute bottom-4 left-6 p-2 bg-white/95 backdrop-blur-sm border border-zinc-200 text-tealAccent rounded-lg shadow-none">
-                                            <IconComp className="w-5 h-5" />
-                                        </div>
+                                      
                                     </div>
 
                                     {/* Content container */}

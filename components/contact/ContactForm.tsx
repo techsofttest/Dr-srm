@@ -51,14 +51,29 @@ export default function ContactForm() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
 
         setIsSubmitting(true);
-        // Simulate email submission API call
-        setTimeout(() => {
-            setIsSubmitting(false);
+        
+        try {
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+            const response = await fetch(`${baseUrl}/contact`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
             setIsSubmitted(true);
             setFormData({
                 name: '',
@@ -67,7 +82,11 @@ export default function ContactForm() {
                 category: '',
                 message: ''
             });
-        }, 1200);
+        } catch (error: any) {
+            setErrors({ submit: error.message || 'Failed to send enquiry' });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -192,6 +211,10 @@ export default function ContactForm() {
                             />
                             {errors.message && <p className="text-[11px] text-red-500 font-medium">{errors.message}</p>}
                         </div>
+
+                        {errors.submit && (
+                            <p className="text-sm text-red-500 text-center font-medium bg-red-50 py-2 rounded-lg">{errors.submit}</p>
+                        )}
 
                         {/* Submit Button */}
                         <div className="pt-2">

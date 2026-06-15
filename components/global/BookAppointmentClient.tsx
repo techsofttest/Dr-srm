@@ -6,12 +6,52 @@ import Button from '@/components/global/Button';
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle2, Stethoscope } from 'lucide-react';
 
 export default function BookAppointmentClient() {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // In a real application, you would send this to your API endpoint
-        setIsSubmitted(true);
+        setIsSubmitting(true);
+        setErrorMessage(null);
+
+        const form = e.currentTarget;
+        const fData = new FormData(form);
+        const payload = {
+            name: fData.get('name'),
+            email: fData.get('email'),
+            phone: fData.get('phone'),
+            type: fData.get('type'),
+            date: fData.get('date'),
+            time: fData.get('time'),
+            message: fData.get('message'),
+        };
+
+        try {
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+            const response = await fetch(`${baseUrl}/book`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || data.message || 'Something went wrong. Please try again.');
+            }
+
+            setIsSubmitted(true);
+            form.reset();
+        } catch (error: any) {
+            console.error(error);
+            setErrorMessage(error.message || 'Failed to submit form');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -55,6 +95,11 @@ export default function BookAppointmentClient() {
                                     Please fill in your details and preferred schedule using the calendar below.
                                 </p>
                             </div>
+                            {errorMessage && (
+                                <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+                                    {errorMessage}
+                                </div>
+                            )}
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Full Name */}
@@ -62,7 +107,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Full Name *</label>
                                         <div className="relative">
                                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="text" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="John Doe" />
+                                            <input type="text" name="name" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="John Doe" />
                                         </div>
                                     </div>
                                     {/* Phone Number */}
@@ -70,7 +115,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Phone Number *</label>
                                         <div className="relative">
                                             <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="tel" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="+91 98765 43210" />
+                                            <input type="tel" name="phone" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="+91 98765 43210" />
                                         </div>
                                     </div>
                                     {/* Email */}
@@ -78,7 +123,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Email Address *</label>
                                         <div className="relative">
                                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="email" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="john@example.com" />
+                                            <input type="email" name="email" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="john@example.com" />
                                         </div>
                                     </div>
                                     {/* Consultation Type */}
@@ -87,7 +132,7 @@ export default function BookAppointmentClient() {
                                         <div className="relative">
                                             <Stethoscope className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                                             <select
-                                                required
+                                                required name="type"
                                                 defaultValue=""
                                                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none"
                                             >
@@ -102,7 +147,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Preferred Date *</label>
                                         <div className="relative">
                                             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                                            <input type="date" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700" />
+                                            <input type="date" name="date" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700" />
                                         </div>
                                     </div>
                                     {/* Preferred Time */}
@@ -111,7 +156,7 @@ export default function BookAppointmentClient() {
                                         <div className="relative">
                                             <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                                             <select
-                                                required
+                                                required name="time"
                                                 defaultValue=""
                                                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none"
                                             >
@@ -127,12 +172,14 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Message / Reason for Visit *</label>
                                         <div className="relative">
                                             <FileText className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
-                                            <textarea required rows={4} className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm resize-none" placeholder="Please describe your symptoms or reason for consultation..."></textarea>
+                                            <textarea required name="message" rows={4} className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm resize-none" placeholder="Please describe your symptoms or reason for consultation..."></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="mt-8 flex justify-center">
-                                    <Button variant="primary" type="submit" className="w-full md:w-auto px-8">Submit Appointment Request</Button>
+                                    <Button variant="primary" type="submit" className="w-full md:w-auto px-8" >
+                                        {isSubmitting ? 'Submitting...' : 'Submit Appointment Request'}
+                                    </Button>
                                 </div>
                             </form>
                         </>

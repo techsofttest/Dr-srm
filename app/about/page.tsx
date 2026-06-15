@@ -5,10 +5,29 @@ import EducationAndTraining from '@/components/about/EducationAndTraining';
 import ProfessionalAffiliations from '@/components/about/ProfessionalAffiliations';
 import PracticeLocation from '@/components/about/PracticeLocation';
 
-export const metadata: Metadata = {
-    title: "About Dr. Soumya Ranjan Malla | Interventional Neuroradiologist in Kochi",
-    description: "Meet Dr. Soumya Ranjan Malla, Consultant Interventional Neuroradiologist trained at AIIMS New Delhi and NIMHANS Bengaluru, specialising in minimally invasive endovascular treatment for stroke, brain aneurysms, and vascular disorders in Kochi.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/about`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 export default function AboutPage() {
     return (

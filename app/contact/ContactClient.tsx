@@ -1,38 +1,43 @@
 'use client';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import InnerPageHero from '@/components/global/InnerPageHero';
 import EmergencyStrokeBanner from '@/components/global/EmergencyStrokeBanner';
 import ContactInfo from '@/components/contact/ContactInfo';
 import ContactForm from '@/components/contact/ContactForm';
 
-const symptoms = [
-    "Sudden weakness of the face, arm or leg",
-    "Sudden speech difficulty",
-    "Sudden vision loss",
-    "Severe unexplained headache",
-    "Sudden imbalance",
-    "Sudden confusion",
-    "Loss of consciousness"
-];
-
 export default function ContactClient() {
+    const [emergency, setEmergency] = useState({
+    title: '',
+    heading: '',
+    symptoms: [],
+    description: '',
+});
+const [contact, setContact] = useState({ phone: ''});
+
+useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`)
+        .then(res => res.json())
+        .then(data => {
+            setEmergency(data.emergency);
+            setContact(data.contact);
+        });
+}, []);
     return (
         <main className="relative min-h-screen flex flex-col bg-white">
-            <InnerPageHero
-                title="Contact &amp; Appointments"
-                category="Get In Touch"
-            />
+           <InnerPageHero
+            title="Contact & Appointments"
+            category="Get In Touch"
+        />
 
-            <EmergencyStrokeBanner
-                title="Seek Immediate Medical Attention If You Experience:"
-                symptoms={symptoms}
-                description="Early treatment can save brain tissue, minimize disability, and significantly improve outcomes."
-                ctaText="24×7 Emergency Helpline"
-                ctaHref="tel:+919629997812"
-                isWarningIcon={true}
-                paddingClass="pt-20 pb-10"
-            />
+        <EmergencyStrokeBanner
+            title={emergency.title}
+            symptoms={emergency.symptoms}
+            description={emergency.description}
+            ctaText="24×7 Emergency Helpline"
+            ctaHref={`tel:${contact.phone}`}
+            isWarningIcon={true}
+            paddingClass="pt-20 pb-10"
+        />
 
             <section className="relative w-full pt-10 pb-24 md:pb-32 bg-white px-5 md:px-[80px] overflow-hidden">
                 {/* Background Saturated Radial Gradients & Spheres */}

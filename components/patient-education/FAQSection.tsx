@@ -1,51 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const faqs = [
-    {
-        question: "How soon should stroke treatment be started?",
-        answer: "Stroke treatment must be initiated immediately. In acute ischaemic stroke, 'time is brain'—every minute of delay results in the loss of nearly two million brain cells. Restoring blood flow through mechanical thrombectomy should ideally be started within minutes of presentation, up to 24 hours for selected large vessel occlusions based on perfusion imaging."
-    },
-    {
-        question: "Can all strokes be treated with thrombectomy?",
-        answer: "No. Mechanical thrombectomy is specifically indicated for acute ischaemic strokes caused by a Large Vessel Occlusion (LVO) in the anterior or posterior circulation. It is not used for hemorrhagic strokes (bleeding in the brain) or strokes caused by small vessel blockage, which are managed medically."
-    },
-    {
-        question: "Is aneurysm coiling safer than surgery?",
-        answer: "Endovascular coiling is a minimally invasive treatment that accesses the brain aneurysm via blood vessels, avoiding the need to open the skull (craniotomy). For many patients, it offers a lower risk of early complications, shorter hospital stays, and faster recovery compared to open surgical clipping. The choice depends on the aneurysm's anatomy, size, location, and patient health."
-    },
-    {
-        question: "What is a flow diverter?",
-        answer: "A flow diverter is a high-density mesh endovascular stent placed in the parent blood vessel across the neck of an aneurysm. It redirects blood flow away from the aneurysm sac, promoting progressive thrombosis and healing of the vessel wall, thereby reconstructing the parent artery without entering the aneurysm itself."
-    },
-    {
-        question: "Do all aneurysms require treatment?",
-        answer: "No. Small, unruptured brain aneurysms with low risk features may not require immediate intervention. They are often monitored regularly with non-invasive imaging (MRA or CTA). Treatment decisions are highly individualized, balancing rupture risk factors (size, location, growth, family history) against the risks of the procedure."
-    },
-    {
-        question: "What causes pulsatile tinnitus?",
-        answer: "Pulsatile tinnitus is a rhythmic sound matching the patient's heartbeat, often caused by vascular anomalies. Common causes include dural arteriovenous fistulas (dAVFs), carotid artery stenosis, idiopathic intracranial hypertension (IIH), high jugular bulbs, or hypervascular skull base tumors. It requires detailed neurovascular angiography review."
-    },
-    {
-        question: "Is cerebral angiography painful?",
-        answer: "Cerebral angiography is generally not painful. It is performed under local anesthesia at the catheter insertion site (usually the groin or wrist) with optional mild sedation. You do not feel the catheter moving through the blood vessels. You may feel a brief warm sensation or 'flush' in the head during contrast injection."
-    },
-    {
-        question: "What is MMA embolisation?",
-        answer: "Middle Meningeal Artery (MMA) embolisation is a contemporary, minimally invasive procedure to treat chronic subdural haematomas (CSDH). By blocking the branches of the MMA that feed the vascular outer membrane of the haematoma, the procedure stops micro-bleeding, allowing the fluid collection to be resorbed naturally and drastically reducing the recurrence rate."
-    },
-    {
-        question: "Can carotid artery disease be treated without surgery?",
-        answer: "Yes. In addition to medical management (antiplatelets, statins, blood pressure control), moderate-to-severe carotid artery stenosis can be treated using minimally invasive Carotid Stenting (CAS). During CAS, a stent is deployed to widen the narrow segment and a filter is used to capture any emboli, avoiding open surgical carotid endarterectomy."
-    },
-    {
-        question: "When should complex imaging and treatment options be reviewed?",
-        answer: "A comprehensive review by an interventional neuroradiologist is recommended when diagnostic imaging (MRI, CT, or DSA) suggests a cerebrovascular abnormality, when seeking a second opinion on a brain aneurysm or vascular malformation, or when evaluating unexplained intracranial hemorrhage, pulsatile tinnitus, or progressive spinal vascular issues."
-    }
-];
+interface faqData{
+    question:string;
+    answer:string;
+}
 
 export default function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -53,6 +15,23 @@ export default function FAQSection() {
     const toggleFAQ = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
+       const [faqs, setPro] = useState<faqData[]>([]);
+    
+               useEffect(() => {
+                   async function fetchFaq() {
+                       try {
+                           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/patienteducation`);
+                           const data = await res.json();
+                           // Extracting 'services' from the consolidated page data object
+                           if (data.faqs && Array.isArray(data.faqs)) {
+                               setPro(data.faqs);
+                           }
+                       } catch (err) {
+                           console.error("Error fetching faqs:", err);
+                       }
+                   }
+                   fetchFaq();
+               }, []);
 
     return (
         <section className="relative w-full py-24 md:py-32 bg-white px-5 md:px-[80px] overflow-hidden">

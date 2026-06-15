@@ -2,11 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import ReferringDoctorsClient from './ReferringDoctorsClient';
 
-export const metadata: Metadata = {
-    title: "For Referring Physicians | Dr. Soumya Ranjan Malla",
-    description: "Refer patients to Dr. Soumya Ranjan Malla, Consultant Interventional Neuroradiologist in Kochi. 24/7 dedicated neurovascular referral line for stroke mechanical thrombectomy, brain aneurysms, carotid disease, and spinal vascular disorders.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/reffering`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
 
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 export default function ReferringDoctorsPage() {
     return (
         <>

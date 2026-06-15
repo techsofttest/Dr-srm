@@ -1,12 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MapPin, Phone, Clock, AlertTriangle } from 'lucide-react';
 import Button from '@/components/global/Button';
 import WhatsAppIcon from '@/components/global/WhatsAppIcon';
-
+interface ContactData {
+    address: string;
+    location: string;
+    phone: string;
+    email: string;
+    whatsapp: string;
+    orcid: string;
+    linkedin: string;
+    available: string;
+}
 export default function PracticeLocation() {
+    const [contact, setContact] = useState<ContactData | null>(null);
+    
+        useEffect(() => {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`) // Adjust endpoint if needed
+                .then(res => res.json())
+                .then(json => setContact(json.contact))
+                .catch(err => console.error("Failed to fetch contact data", err));
+        }, []);
+    
+        if (!contact) return null; // Or a loading skeleton
     return (
         <section className="relative w-full py-24 bg-bgLight px-5 md:px-[80px] overflow-hidden">
             {/* Background layout decoration */}
@@ -47,19 +66,18 @@ export default function PracticeLocation() {
                                     Primary Practice Location
                                 </h4>
                             </div>
-                            <h5 className="text-2xl font-serif font-bold text-deepNavy mb-2">
-                                Renai Medicity, Kochi
-                            </h5>
-                            <p className="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                                Department of Neurology &amp; Behavioural Sciences, Palarivattom, Kochi, Kerala, India
-                            </p>
+                                        <div 
+                                            className="text-sm text-slate-600 font-light leading-relaxed mb-4 
+                                            [&_strong]:text-2xl [&_strong]:font-serif [&_strong]:font-bold [&_strong]:text-deepNavy [&_strong]:block [&_strong]:mb-2"
+                                            dangerouslySetInnerHTML={{ __html: contact?.address || '' }}
+                                        />
                         </div>
 
                         <div className="border-t border-slate-100 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
                             <div className="flex items-center gap-2.5 text-slate-600">
                                 <Clock className="w-4 h-4 text-tealAccent shrink-0" />
                                 <span className="text-xs font-medium">
-                                    <strong>Consultation Hours:</strong> Monday – Saturday
+                                    <strong>Consultation Hours:</strong> {contact.available}
                                 </span>
                             </div>
                             <div className="flex items-center gap-1.5 text-tealAccent bg-bgLight border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold w-fit">
@@ -84,7 +102,7 @@ export default function PracticeLocation() {
                             {/* Booking - Primary Teal */}
                             <Button
                                 variant="primary"
-                                href="tel:+919629997812"
+                                href={`tel:${contact.phone}`}
                                 className="w-full flex items-center justify-center gap-2"
                             >
                                 <Phone className="w-4 h-4" />
@@ -94,7 +112,7 @@ export default function PracticeLocation() {
                             {/* WhatsApp - Secondary Outline */}
                             <Button
                                 variant="secondary"
-                                href="https://wa.me/919629997812"
+                                href={contact.whatsapp}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="w-full flex items-center justify-center gap-2"
@@ -106,7 +124,7 @@ export default function PracticeLocation() {
                             {/* Maps Location - Secondary Outline */}
                             <Button
                                 variant="secondary"
-                                href="https://maps.google.com/?q=Renai+Medicity+Kochi"
+                                href={contact.location}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="w-full flex items-center justify-center gap-2"

@@ -1,68 +1,48 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Award, ShieldCheck, Eye, Activity, Globe, HeartPulse } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const pillars = [
-    {
-        title: "AIIMS & NIMHANS trained Specialist",
-        description: "Advanced training in neuroradiology and neurointervention from India's premier medical institutions.",
-        icon: Award,
-        iconAnim: {
-            animate: { y: [0, -5, 0] },
-            transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' as const },
-        },
-    },
-    {
-        title: "Dedicated Neurovascular Practice",
-        description: "Focused exclusively on stroke, brain aneurysms, vascular malformations, carotid disease and cerebrovascular disorders.",
-        icon: ShieldCheck,
-        iconAnim: {
-            animate: { scale: [1, 1.15, 1] },
-            transition: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.3 },
-        },
-    },
-    {
-        title: "Imaging + Intervention Expertise",
-        description: "Comprehensive diagnosis, treatment planning and intervention through advanced neuroimaging and contemporary endovascular therapies.",
-        icon: Eye,
-        iconAnim: {
-            animate: { x: [0, 4, -4, 0] },
-            transition: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.5 },
-        },
-    },
-    {
-        title: "Extensive Neurovascular Experience",
-        description: "Significant experience in mechanical thrombectomy, aneurysm treatment, carotid interventions and diagnostic neurovascular angiography.",
-        icon: Activity,
-        iconAnim: {
-            animate: { scaleX: [1, 1.2, 0.9, 1.15, 1] },
-            transition: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.2 },
-        },
-    },
-    {
-        title: "International Exposure",
-        description: "Training exposure at National University Hospital, Singapore with emphasis on stroke systems of care, workflow optimisation and quality assurance.",
-        icon: Globe,
-        iconAnim: {
-            animate: { rotate: [0, 360] },
-            transition: { duration: 8, repeat: Infinity, ease: 'linear' as const, delay: 0 },
-        },
-    },
-    {
-        title: "Protocol-Driven Care",
-        description: "Evidence-based treatment pathways prioritising safety, efficiency and clinical outcomes.",
-        icon: HeartPulse,
-        iconAnim: {
-            animate: { scale: [1, 1.2, 1, 1.15, 1] },
-            transition: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.4 },
-        },
-    },
+interface Highlight {
+    title: string;
+    description: string;
+}
+
+interface Excellence {
+    title: string;
+    content: string;
+}
+
+const icons = [Award, ShieldCheck, Eye, Activity, Globe, HeartPulse];
+const iconAnims = [
+    { animate: { y: [0, -5, 0] }, transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' as const } },
+    { animate: { scale: [1, 1.15, 1] }, transition: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.3 } },
+    { animate: { x: [0, 4, -4, 0] }, transition: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.5 } },
+    { animate: { scaleX: [1, 1.2, 0.9, 1.15, 1] }, transition: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.2 } },
+    { animate: { rotate: [0, 360] }, transition: { duration: 8, repeat: Infinity, ease: 'linear' as const, delay: 0 } },
+    { animate: { scale: [1, 1.2, 1, 1.15, 1] }, transition: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.4 } },
 ];
 
 export default function WhyChoose() {
+    const [highlights, setHighlights] = useState<Highlight[]>([]);
+    const [excellence, setExcellence] = useState<Excellence | null>(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
+                const data = await res.json();
+                if (data.highlights) setHighlights(data.highlights);
+                if (data.excellence) setExcellence(data.excellence);
+            } catch (error) {
+                console.error("Failed to fetch WhyChoose data:", error);
+            }
+        }
+        fetchData();
+    }, []);
+
     return (
         <section className="relative w-full pt-24 pb-32 bg-bgLight px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
             {/* Background decorative image */}
@@ -84,7 +64,7 @@ export default function WhyChoose() {
                     <path d="M50 25 V65 M30 45 H70" strokeWidth="2.5" />
                 </svg>
             </div>
-            
+
             {/* Heartbeat pulse wave in background */}
             <div className="absolute left-10 bottom-10 w-2/3 h-32 text-tealAccent/[0.03] pointer-events-none select-none z-0">
                 <svg viewBox="0 0 300 100" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full">
@@ -100,17 +80,19 @@ export default function WhyChoose() {
                         Why Choose
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                        Excellence in Neurointerventional Care
+                        {excellence?.title || "Excellence in Neurointerventional Care"}
                     </h3>
                     <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
-                        A clinical methodology anchored in India's top medical institutes, global standard protocols, and extensive procedural experience.
+                        {excellence?.content || "A clinical methodology anchored in India's top medical institutes, global standard protocols, and extensive procedural experience."}
                     </p>
                 </div>
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {pillars.map((pillar, idx) => {
-                        const IconComponent = pillar.icon;
+                    {highlights.map((pillar, idx) => {
+                        const IconComponent = icons[idx % icons.length];
+                        const anim = iconAnims[idx % iconAnims.length];
+
                         return (
                             <motion.div
                                 key={idx}
@@ -126,8 +108,8 @@ export default function WhyChoose() {
                                 {/* Animated Icon */}
                                 <div className="mb-6 w-12 h-12 rounded-xl bg-tealAccent/10 text-tealAccent flex items-center justify-center group-hover:bg-tealAccent/20 transition-colors duration-300">
                                     <motion.div
-                                        animate={pillar.iconAnim.animate}
-                                        transition={pillar.iconAnim.transition}
+                                        animate={anim.animate}
+                                        transition={anim.transition}
                                     >
                                         <IconComponent className="w-6 h-6" />
                                     </motion.div>

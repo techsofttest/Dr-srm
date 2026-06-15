@@ -16,10 +16,29 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Dr. Soumya Ranjan Malla | Interventional Neuroradiologist | Stroke, Brain Aneurysm & Neurovascular Specialist in Kochi",
-  description: "AIIMS New Delhi and NIMHANS Bengaluru trained Interventional Neuroradiologist in Kochi specialising in stroke thrombectomy, brain aneurysm treatment, AVM embolisation, carotid stenting, MMA embolisation and advanced neurovascular care across Kerala.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/pages`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 const jsonLd = {
   "@context": "https://schema.org",

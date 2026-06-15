@@ -2,11 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import ConditionsClient from './ConditionsClient';
 
-export const metadata: Metadata = {
-    title: "Conditions Treated | Dr. Soumya Ranjan Malla",
-    description: "Expert endovascular evaluation and treatment for stroke, brain aneurysms, vascular malformations (AVMs, dAVFs), carotid stenosis, and spinal vascular disorders in Kochi, Kerala.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/condition`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
 
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 export default function ConditionsPage() {
     return (
         <>

@@ -2,10 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import AcademicProfileClient from './AcademicProfileClient';
 
-export const metadata: Metadata = {
-    title: "Academic Profile & Publications | Dr. Soumya Ranjan Malla",
-    description: "Explore the academic profile, invited lectures, conference faculty leadership, and peer-reviewed research publications of Dr. Soumya Ranjan Malla, Interventional Neuroradiologist in Kochi.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/accademic`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
+
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 
 export default function AcademicProfilePage() {
     return (

@@ -1,17 +1,42 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     ArrowUpRight, ShieldAlert, Cpu, HeartPulse, HelpCircle, Activity, Monitor,
 } from 'lucide-react';
 import Link from 'next/link';
-import { procedures } from '@/data/clinicalContent';
 
 const iconMap: Record<string, React.ElementType> = {
     ShieldAlert, Cpu, HeartPulse, HelpCircle, Activity, Monitor,
 };
+interface ProceduresList {
+    id: number;
+    slug: string;
+    listingTitle: string;
+    listingDescription: string; // Used in place of 'items'
+    listingDetails:string[];
+    image: string;
+    listingActionText: string;
+    icon:string
+}
 
 export default function ProceduresList() {
+     const [proceduresList, setProceduresList] = useState<ProceduresList[]>([]);
+        
+            useEffect(() => {
+                async function fetchServices() {
+                    try {
+                        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/procedure`);
+                        const data = await res.json();
+                        if (data.procedure && Array.isArray(data.procedure)) {
+                            setProceduresList(data.procedure);
+                        }
+                    } catch (err) {
+                        console.error("Error fetching condition:", err);
+                    }
+                }
+                fetchServices();
+            }, []);
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
             {/* Background Saturated Radial Gradients & Spheres */}
@@ -24,8 +49,8 @@ export default function ProceduresList() {
 
             <div className="relative z-10 max-w-[1600px] mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                    {procedures.map((proc) => {
-                        const IconComp = iconMap[proc.iconName] ?? ShieldAlert;
+                    {proceduresList.map((proc) => {
+                        const IconComp = iconMap[proc.icon] ?? ShieldAlert;
                         return (
                             <div
                                 key={proc.slug}

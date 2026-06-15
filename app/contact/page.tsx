@@ -2,11 +2,29 @@ import { Metadata } from 'next';
 import Header from '@/components/global/Header';
 import ContactClient from './ContactClient';
 
-export const metadata: Metadata = {
-    title: "Contact & Appointments | Dr. Soumya Ranjan Malla",
-    description: "Book an appointment or request an emergency neurovascular consultation with Dr. Soumya Ranjan Malla in Kochi. Accessible via phone, email, and WhatsApp.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/contact`,
+            {
+                next: { revalidate: 3600 },
+            }
+        );
 
+        const data = await res.json();
+
+        return {
+            title: data?.seo?.title || 'Patient Education Centre',
+            description: data?.seo?.description || '',
+            keywords: data?.seo?.keywords || '',
+        };
+    } catch (error) {
+        return {
+            title: 'Patient Education Centre',
+            description: '',
+        };
+    }
+}
 export default function ContactPage() {
     return (
         <>

@@ -1,17 +1,49 @@
 'use client';
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, AlertCircle, UserPlus, ArrowRight } from 'lucide-react';
 import Button from '@/components/global/Button';
 
+interface Banner {
+title:string;
+name:string;
+qualifications:string;
+headline:string;
+subtext:string;
+image:string;
+}
 export default function Hero() {
+const [banner, setBanner] = useState<Banner | null>(null);
+  const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+    async function fetchBanner() {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
+            const data = await res.json();
+            if (data.banner) { 
+                setBanner(data.banner); 
+            }
+        } catch (error) {
+            console.error("Failed to fetch banner:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchBanner();
+}, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (!banner) return null;
     return (
         <section id="home" className="relative w-full min-h-screen pt-32 pb-20 flex items-center bg-white overflow-hidden">
             {/* Background Portrait Image with Gradients */}
             <div className="absolute inset-0 z-0">
-                <div
-                    className="absolute inset-0 bg-[url('/hero-sec/soumya7.png')] bg-cover bg-center md:bg-right bg-no-repeat opacity-50 md:opacity-85"
-                />
+              <div
+    className="absolute inset-0 bg-cover bg-center md:bg-right bg-no-repeat opacity-50 md:opacity-85"
+    style={{ 
+        backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL_BASE || ''}${banner.image}')` 
+    }}
+/>
                 {/* Responsive gradient masks for text readability */}
                 {/* Mobile: Full white overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-white/85 to-white/70 md:hidden" />
@@ -26,27 +58,27 @@ export default function Hero() {
 
                     {/* Specialty Subtitle */}
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-tealAccent/10 border border-tealAccent/40 text-tealAccent font-bold text-xs uppercase tracking-wider mb-6">
-                        <span>Interventional Neuroradiology</span>
+                        <span>{banner.title}</span>
                     </div>
 
                     {/* Dr. Malla Name */}
                     <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif text-deepNavy tracking-tight leading-[1.05] mb-4">
-                        Dr. Soumya Ranjan Malla
+                       {banner.name}
                     </h1>
 
                     {/* Qualifications Block */}
                     <p className="text-xs sm:text-sm md:text-base text-tealAccent font-semibold tracking-wide border-l-2 border-tealAccent pl-3 mb-6 max-w-3xl leading-relaxed">
-                        MBBS (Gold Medallist) &bull; MD Radiodiagnosis (AIIMS New Delhi) &bull; DM Neuroimaging & Interventional Neuroradiology (NIMHANS Bengaluru)
+                        {banner.qualifications}
                     </p>
 
                     {/* Main Headline */}
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-serif text-deepNavy tracking-tight leading-snug mb-4 max-w-3xl">
-                        Advanced Neurovascular Care for Stroke, Brain Aneurysms & Cerebrovascular Disorders
+                       {banner.headline}
                     </h2>
 
                     {/* Detailed Subtext */}
                     <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mb-10 font-light">
-                        Providing advanced minimally invasive treatment for stroke, brain aneurysms, vascular malformations, carotid artery disease, spinal vascular disorders and complex neurovascular emergencies through contemporary endovascular techniques and advanced neuroimaging.
+                       {banner.subtext}
                     </p>
 
                     {/* Three-Button CTA Layout — Boxed, Full-Width, Animated */}

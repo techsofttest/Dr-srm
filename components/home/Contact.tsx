@@ -1,12 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Phone, MessageSquare, Mail, MapPin, Clock, AlertCircle, ArrowRight } from 'lucide-react';
 import WhatsAppIcon from '@/components/global/WhatsAppIcon';
 
-
+interface ContactData {
+    address: string;
+    location: string;
+    phone: string;
+    email: string;
+    whatsapp: string;
+    orcid: string;
+    linkedin: string;
+    available: string;
+}
 export default function Contact() {
+    const [contact, setContact] = useState<ContactData | null>(null);
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`) // Adjust endpoint if needed
+            .then(res => res.json())
+            .then(json => setContact(json.contact))
+            .catch(err => console.error("Failed to fetch contact data", err));
+    }, []);
+
+    if (!contact) return null; // Or a loading skeleton
     return (
         <section id="contact" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
             {/* Background decorative image */}
@@ -46,15 +65,16 @@ export default function Contact() {
                                     <h4 className="text-xs font-bold text-tealAccent uppercase tracking-widest mb-1">
                                         Primary Practice Location
                                     </h4>
-                                    <h5 className="text-xl font-serif font-bold text-deepNavy mb-2">
-                                        Renai Medicity, Kochi
-                                    </h5>
-                                    <p className="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                                        Department of Neurology & Behavioural Sciences, Palarivattom, Kochi, Kerala, India
-                                    </p>
+      
+
+                                        <div 
+                                            className="text-sm text-slate-600 font-light leading-relaxed mb-4 
+                                            [&_strong]:text-xl [&_strong]:font-serif [&_strong]:font-bold [&_strong]:text-deepNavy [&_strong]:block [&_strong]:mb-2"
+                                            dangerouslySetInnerHTML={{ __html: contact?.address || '' }}
+                                        />
                                     <div className="flex flex-wrap gap-4 text-xs font-bold text-tealAccent">
                                         <a 
-                                            href="https://maps.google.com/?q=Renai+Medicity+Kochi" 
+                                            href={contact?.location} 
                                             target="_blank" 
                                             rel="noreferrer" 
                                             className="inline-flex items-center gap-1.5 hover:underline underline-offset-4"
@@ -86,7 +106,7 @@ export default function Contact() {
                         
                         {/* Direct Line */}
                         <a 
-                            href="tel:+919629997812"
+                            href={`tel:${contact.phone}`}
                             className="bg-bgLight/50 border border-slate-300 hover:border-tealAccent/40 hover:bg-bgLight rounded-2xl p-8 flex flex-col justify-between group transition-all duration-300 animate-none"
                         >
                             <div className="p-3 bg-white border border-slate-300 text-tealAccent rounded-xl w-fit mb-8 group-hover:scale-105 transition-transform duration-300">
@@ -101,14 +121,14 @@ export default function Contact() {
                                     <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                                 </h5>
                                 <p className="text-sm font-semibold text-deepNavy font-mono leading-none">
-                                    +91 9629997812
+                                    {contact?.phone}
                                 </p>
                             </div>
                         </a>
 
                         {/* WhatsApp Enquiry */}
                         <a 
-                            href="https://wa.me/919629997812"
+                            href={contact?.whatsapp}
                             target="_blank"
                             rel="noreferrer"
                             className="bg-bgLight/50 border border-slate-300 hover:border-tealAccent/40 hover:bg-bgLight rounded-2xl p-8 flex flex-col justify-between group transition-all duration-300 animate-none"
@@ -132,7 +152,7 @@ export default function Contact() {
 
                         {/* Email Enquiry */}
                         <a 
-                            href="mailto:drsoumyaranjanrd@gmail.com"
+                            href={`mailto:{contact?.email}`}
                             className="bg-bgLight/50 border border-slate-300 hover:border-tealAccent/40 hover:bg-bgLight rounded-2xl p-8 flex flex-col justify-between group transition-all duration-300 animate-none"
                         >
                             <div className="p-3 bg-white border border-slate-300 text-tealAccent rounded-xl w-fit mb-8 group-hover:scale-105 transition-transform duration-300">
@@ -147,7 +167,7 @@ export default function Contact() {
                                     <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                                 </h5>
                                 <p className="text-xs text-slate-500 break-all font-light">
-                                    drsoumyaranjanrd@gmail.com
+                                   {contact?.email}
                                 </p>
                             </div>
                         </a>
@@ -165,7 +185,7 @@ export default function Contact() {
                                     Available by Appointment
                                 </h5>
                                 <p className="text-xs text-slate-500 font-light">
-                                    Monday &bull; Saturday (Renai Medicity)
+                                    {contact?.available}
                                 </p>
                             </div>
                         </div>

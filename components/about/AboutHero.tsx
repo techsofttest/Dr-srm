@@ -1,10 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export default function AboutHero() {
+    const [aboutHero, setAboutHero] = useState<any>(null);
+     useEffect(() => {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/about`) // Adjust endpoint if needed
+                .then(res => res.json())
+                .then(json => setAboutHero(json.aboutHero))
+                .catch(err => console.error("Failed to fetch contact data", err));
+        }, []);
     return (
         <section className="relative w-full pt-40 pb-24 md:pt-48 md:pb-28 bg-white px-5 md:px-[80px] overflow-clip border-b border-slate-100">
             {/* Background decorative elements */}
@@ -32,13 +39,13 @@ export default function AboutHero() {
                             <div className="relative">
                                 {/* Main image container */}
                                 <div className="relative h-[450px] sm:h-[550px] md:h-[620px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 z-10">
-                                    <Image
-                                        src="/about-page/soumya1.png"
-                                        alt="Dr. Soumya Ranjan Malla"
-                                        fill
-                                        className="object-cover object-top hover:scale-[1.02] transition-transform duration-700"
-                                        priority
-                                    />
+                                   <Image
+                                            src={aboutHero?.image || "/about-page/soumya1.png"}
+                                            alt={aboutHero?.name || "Doctor"}
+                                            fill
+                                            className="object-cover object-top hover:scale-[1.02] transition-transform duration-700"
+                                            priority
+                                        />
 
                                     {/* Subtle Gradient Shadow Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-deepNavy/60 via-transparent to-transparent pointer-events-none" />
@@ -46,8 +53,8 @@ export default function AboutHero() {
                                     {/* Name Tag */}
                                     <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-3.5">
-                                            <p className="text-white font-bold text-base">Dr. Soumya Ranjan Malla</p>
-                                            <p className="text-white text-xs font-semibold mt-0.5">Consultant Interventional Neuroradiologist</p>
+                                            <p className="text-white font-bold text-base">{aboutHero?.name}</p>
+                                            <p className="text-white text-xs font-semibold mt-0.5">{aboutHero?.designation}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -67,25 +74,18 @@ export default function AboutHero() {
                         </div>
 
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-deepNavy leading-tight mb-8">
-                            Dedicated Expertise in Neurovascular &amp; Endovascular Care
+                           {aboutHero?.cms_title}
                         </h1>
 
                         <div className="space-y-6 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
                             <p className="text-lg font-medium text-slate-800 leading-normal border-l-2 border-tealAccent pl-4">
-                                Many neurological emergencies and vascular disorders that previously required major surgery can now be treated through minimally invasive catheter-based techniques.
+                                {aboutHero?.quote}
                             </p>
-                            <p>
-                                Dr. Soumya Ranjan Malla is a Consultant Interventional Neuroradiologist specialising in the diagnosis and treatment of cerebrovascular and spinal vascular disorders. His practice focuses on acute stroke intervention, brain aneurysm treatment, carotid and intracranial revascularisation, embolisation of vascular malformations and advanced neurovascular imaging.
-                            </p>
-                            <p>
-                                Trained at AIIMS, New Delhi and NIMHANS, Bengaluru, he combines expertise in advanced neuroimaging with contemporary endovascular therapies to deliver comprehensive, patient-centred neurovascular care.
-                            </p>
-                            <p>
-                                In addition to clinical practice, he has actively contributed to the development of neurointerventional services through protocol-based stroke pathways, multidisciplinary neurovascular programmes, quality improvement initiatives and clinical governance frameworks.
-                            </p>
-                            <p>
-                                His academic interests include cerebrovascular disease, advanced neuroimaging and AI-supported workflow optimisation in neurovascular care.
-                            </p>
+                            <div className="space-y-6 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
+                                    {aboutHero?.content?.map((paragraph: string, index: number) => (
+                                        <p key={index}>{paragraph}</p>
+                                    ))}
+                                </div>
                         </div>
                     </motion.div>
 

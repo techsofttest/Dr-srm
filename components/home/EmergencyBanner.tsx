@@ -1,11 +1,42 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldAlert, PhoneCall } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
+interface emergency{
+    title: string;
+    content: string;
+    link: {
+        url: string;
+        text: string;
+    };
+    image: string;
+}
+
 export default function EmergencyBanner() {
+    const [emergency, setEmergency] = useState<emergency | null>(null);
+    const [loading, setLoading] = useState(true);
+    
+     useEffect(() => {
+        async function fetchemergency() {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
+                const data = await res.json();
+                if (data.emergency) { 
+                    setEmergency(data.emergency); 
+                }
+            } catch (error) {
+                console.error("Failed to fetch emergency:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchemergency();
+    }, []);
+    if (loading) return <div>Loading...</div>;
+    if (!emergency) return null;
     return (
         <section
             id="emergency-stroke"
@@ -62,13 +93,11 @@ export default function EmergencyBanner() {
 
                         <div>
                             <h3 className="text-base sm:text-lg md:text-xl font-bold font-serif tracking-wide mb-2 uppercase leading-snug">
-                                Emergency Stroke Alert: Stroke is a Medical Emergency
+                                {emergency.title}
                             </h3>
                             <p className="text-xs sm:text-sm md:text-base text-white/90 leading-relaxed font-light">
-                                Sudden weakness of the face, arm, or leg, speech difficulty, vision loss, facial droop, or imbalance may indicate an acute stroke.{' '}
-                                <strong className="font-bold text-white">
-                                    Early treatment can save brain tissue, minimize disability, and significantly improve recovery.
-                                </strong>
+                                {emergency.content}
+                            
                             </p>
                         </div>
                     </div>
@@ -77,11 +106,11 @@ export default function EmergencyBanner() {
                     <div className="shrink-0 w-full lg:w-auto">
                         <Button
                             variant="danger-white"
-                            href="tel:+919629997812"
+                            href={emergency.link.url}
                             className="w-full lg:w-auto"
                         >
                             <PhoneCall className="w-4 h-4" />
-                            <span>24×7 Emergency Helpline</span>
+                            <span>{emergency.link.text}</span>
                         </Button>
                     </div>
                 </motion.div>

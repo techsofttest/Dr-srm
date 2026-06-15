@@ -1,11 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Brain, Heart, Layers, ShieldCheck, Microscope, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// ── Animated neural network background ───────────────────────────────────────
+const ICONS = {
+    Brain,
+    Heart,
+    Layers,
+    ShieldCheck,
+    Microscope,
+} as const;
 
+type IconName = keyof typeof ICONS;
+
+// ── Animated neural network background ───────────────────────────────────────
+interface ProData {
+    title: string;
+    description: string;
+    icon: IconName;
+    techniques: string[];
+}
 // Nodes: [x%, y%] positions in the SVG viewBox (0–100 × 0–100)
 const NODES: [number, number][] = [
     [8, 8], [25, 4], [44, 7], [62, 3], [80, 10], [94, 6],
@@ -126,73 +141,24 @@ function NeuralNetworkBg() {
 }
 
 
-const procedures = [
-    {
-        title: "Mechanical Thrombectomy",
-        icon: Brain,
-        description: "Rapid clot retrieval for acute ischaemic stroke using aspiration and stent-retriever techniques.",
-        techniques: [
-            "Aspiration Thrombectomy (ADAPT technique)",
-            "Stent-Retriever Clot Extraction",
-            "Combined Solumbra Protocol",
-            "Emergency Revascularisation"
-        ]
-    },
-    {
-        title: "Brain Aneurysm Treatment",
-        icon: Heart,
-        description: "Minimally invasive reconstruction and occlusion of ruptured and unruptured intracranial aneurysms.",
-        techniques: [
-            "Simple Coiling",
-            "Balloon-Assisted Coiling",
-            "Stent-Assisted Coiling",
-            "Flow Diversion",
-            "Parent Vessel Reconstruction",
-            "Complex Aneurysm Treatment"
-        ]
-    },
-    {
-        title: "AVM & dAVF Embolisation",
-        icon: Layers,
-        description: "Targeted catheter-guided embolisation of vascular malformations of the brain and spine.",
-        techniques: [
-            "Cerebral AVM Embolisation",
-            "Cranial dAVF Embolisation",
-            "Carotid-Cavernous Fistula Embolisation",
-            "Spinal dAVF Embolisation",
-            "Head & Neck Vascular Malformation Embolisation",
-            "Pre-operative Embolisation"
-        ]
-    },
-    {
-        title: "Cerebrovascular Revascularisation",
-        icon: ShieldCheck,
-        description: "Endovascular stenting and angioplasty to prevent stroke and restore cerebral blood flow.",
-        techniques: [
-            "Carotid Artery Stenting",
-            "Intracranial Angioplasty",
-            "Intracranial Stenting",
-            "Cerebral Perfusion Assessment",
-            "Stroke Prevention Consultation"
-        ]
-    },
-    {
-        title: "Diagnostic Neurovascular Imaging",
-        icon: Microscope,
-        description: "Advanced diagnostic assessments utilizing state-of-the-art angiography and neuroimaging protocols.",
-        techniques: [
-            "Cerebral Angiography",
-            "Spinal Angiography",
-            "CT Angiography",
-            "MR Angiography",
-            "Vessel Wall Imaging",
-            "Perfusion Imaging",
-            "Advanced MRI Interpretation"
-        ]
-    }
-];
-
 export default function SpecialisedProcedures() {
+    const [pro, setPro] = useState<ProData[]>([]);
+   
+       useEffect(() => {
+           async function fetchProcedure() {
+               try {
+                   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
+                   const data = await res.json();
+                   // Extracting 'services' from the consolidated page data object
+                   if (data.pro && Array.isArray(data.pro)) {
+                       setPro(data.pro);
+                   }
+               } catch (err) {
+                   console.error("Error fetching services:", err);
+               }
+           }
+           fetchProcedure();
+       }, []);
     return (
         <section id="procedures" className="relative w-full py-24 bg-deepNavy text-white px-5 md:px-[80px] overflow-hidden">
             {/* Animated neural network */}
@@ -219,8 +185,10 @@ export default function SpecialisedProcedures() {
 
                 {/* Grid Layout */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {procedures.map((proc, idx) => {
-                        const Icon = proc.icon;
+                    {pro.map((proc, idx) => {
+                        // 1. Look up the component based on the string name
+                        const IconComponent = ICONS[proc.icon as IconName] || Brain;
+
                         return (
                             <motion.div
                                 key={idx}
@@ -232,7 +200,8 @@ export default function SpecialisedProcedures() {
                             >
                                 <div className="flex items-center gap-4 mb-6">
                                     <div className="p-3 bg-white/5 text-tealAccent rounded-2xl">
-                                        <Icon className="w-6 h-6" />
+                                        {/* 2. Render the resolved component */}
+                                        <IconComponent className="w-6 h-6" />
                                     </div>
                                     <h4 className="text-lg sm:text-xl font-serif font-bold text-white leading-tight">
                                         {proc.title}

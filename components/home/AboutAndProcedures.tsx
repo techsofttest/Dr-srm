@@ -12,23 +12,40 @@ import { motion, useInView, animate } from 'framer-motion';
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
-const stats = [
-    { number: 100, suffix: '+', label: 'Mechanical Thrombectomy Procedures', icon: Brain },
-    { number: 75, suffix: '+', label: 'Intracranial Aneurysm Treatments', icon: Heart },
-    { number: 100, suffix: '+', label: 'Carotid & Intracranial Stenting', icon: Activity },
-    { number: 35, suffix: '+', label: 'AVM & dAVF Embolisations', icon: Layers },
-    { number: 750, suffix: '+', label: 'Diagnostic Cerebral Angiograms', icon: ActivitySquare },
-    { number: 60, suffix: '+', label: 'Image-Guided Spine Interventions', icon: ShieldAlert },
+interface StatData {
+    number: number;
+    suffix: string;
+    label: string;
+}
+
+interface PageData {
+
+    about: {
+        name: string;
+        title: string
+        highlights: string[];
+        content: string;
+        cms_title: string;
+        image: string;
+    };
+    metrics: {
+        title: string;
+        image: string;
+        heading: string;
+        subtext: string;
+        stats: StatData[]; // Fetching stats directly from the API
+    };
+
+}
+const icons = [
+    Brain,
+    Heart,
+    Activity,
+    Layers,
+    ActivitySquare,
+    ShieldAlert,
 ];
 
-const highlights = [
-    'Minimally invasive catheter-based techniques',
-    'Acute stroke intervention & thrombectomy',
-    'Brain aneurysm coiling & flow diversion',
-    'Carotid & intracranial revascularisation',
-    'AVM / dAVF embolisation',
-    'Advanced neurovascular imaging (MRA, CTA, DSA)',
-];
 
 // ── Animated counter (self-contained, owns its own ref) ─────────────────────
 
@@ -56,10 +73,11 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
 
 // ── Stat Card ─────────────────────────────────────────────────────────────────
 
-function StatCard({ stat, idx }: { stat: typeof stats[0]; idx: number }) {
+function StatCard({ stat, idx }: { stat: StatData; idx: number }) {
     const cardRef = useRef<HTMLDivElement>(null);
     const inView = useInView(cardRef, { once: true, margin: '-60px' });
-    const Icon = stat.icon;
+    // Map the string from API to the corresponding Lucide icon component
+    const Icon = icons[idx % icons.length];
 
     return (
         <motion.div
@@ -88,8 +106,18 @@ function StatCard({ stat, idx }: { stat: typeof stats[0]; idx: number }) {
 // ── Main Component ────────────────────────────────────────────────────────────
 
 export default function AboutAndProcedures() {
+    const [data, setData] = useState<PageData | null>(null);
     const statsRef = useRef<HTMLDivElement>(null);
     const statsInView = useInView(statsRef, { once: true, margin: '-80px' });
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
+            .then(res => res.json())
+            .then(json => setData(json))
+            .catch(err => console.error(err));
+    }, []);
+
+    if (!data) return <div className="py-24 text-center text-white">Loading...</div>;
 
     return (
         <>
@@ -123,21 +151,23 @@ export default function AboutAndProcedures() {
                             <div className="relative">
                                 {/* Main image frame */}
                                 <div className="relative h-[500px] md:h-[580px] rounded-3xl overflow-hidden border border-slate-200">
-                                    <Image
-                                        src="/hero-sec/soumya-pr.jpg"
-                                        alt="Dr. Soumya Ranjan Malla"
-                                        fill
-                                        className="object-cover object-top"
-                                        priority
-                                    />
-                                    {/* Gradient footer on image */}
+                                    {data.about.image && (
+                                        <Image
+                                            src={`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}${data.about.image}`}
+                                            alt={data.about.name}
+                                            fill
+                                            sizes="(max-width: 1024px) 100vw, 40vw"
+                                            className="object-cover object-top"
+                                            priority
+                                        />
+                                    )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-deepNavy/70 via-transparent to-transparent" />
-
+                                    
                                     {/* Name badge at bottom of image */}
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/30 rounded-xl px-4 py-3">
-                                            <p className="text-white font-bold text-sm">Dr. Soumya Ranjan Malla</p>
-                                            <p className="text-tealAccent text-xs font-medium mt-0.5">Consultant Interventional Neuroradiologist</p>
+                                            <p className="text-white font-bold text-sm">{data.about.name}</p>
+                                            <p className="text-tealAccent text-xs font-medium mt-0.5">{data.about.title}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -197,24 +227,17 @@ export default function AboutAndProcedures() {
                                 Dedicated Expertise
                             </h2>
                             <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-8">
-                                Neurovascular &amp;<br className="hidden md:block" /> Endovascular Care
+                                {data.about.cms_title}<br className="hidden md:block" />
                             </h3>
 
-                            <div className="space-y-5 text-slate-700 text-sm sm:text-base leading-relaxed font-light mb-8">
-                                <p className="text-lg font-medium text-slate-900 leading-normal">
-                                    Many neurological emergencies and vascular disorders that previously required major surgery can now be treated through minimally invasive catheter-based techniques.
-                                </p>
-                                <p>
-                                    Dr. Soumya Ranjan Malla is a Consultant Interventional Neuroradiologist specialising in the diagnosis and treatment of cerebrovascular and spinal vascular disorders. His practice focuses on acute stroke intervention, brain aneurysm treatment, carotid and intracranial revascularisation, embolisation of vascular malformations and advanced neurovascular imaging.
-                                </p>
-                                <p>
-                                    Trained at AIIMS New Delhi and NIMHANS Bengaluru, he combines expertise in advanced neuroimaging with contemporary endovascular therapies to deliver comprehensive, patient-centred neurovascular care.
-                                </p>
-                            </div>
+                            <div
+                                className="space-y-5 text-slate-700 text-sm sm:text-base leading-relaxed font-light mb-8"
+                                dangerouslySetInnerHTML={{ __html: data.about.content }}
+                            />
 
                             {/* Highlight Checklist */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
-                                {highlights.map((h, i) => (
+                                {data.about.highlights.map((h, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ opacity: 0, x: -10 }}
@@ -270,20 +293,20 @@ export default function AboutAndProcedures() {
                     >
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 inline-flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent" />
-                            Practice Metrics
+                            {data.metrics?.title}
                             <span className="w-12 h-[1px] bg-tealAccent" />
                         </h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-white leading-tight">
-                            Independent Procedural Experience
+                            {data.metrics?.heading}
                         </h3>
                         <p className="mt-4 text-white/55 text-sm sm:text-base max-w-2xl mx-auto font-light">
-                            A growing body of independently performed endovascular procedures across India's leading neurovascular centres.
+                            {data.metrics?.subtext}
                         </p>
                     </motion.div>
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {stats.map((stat, idx) => (
+                        {data.metrics?.stats?.map((stat, idx) => (
                             <StatCard key={idx} stat={stat} idx={idx} />
                         ))}
                     </div>

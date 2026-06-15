@@ -1,38 +1,36 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCircle2, FileSearch, HelpCircle } from 'lucide-react';
 
-const commonConditions = [
-    "Large Vessel Occlusion Stroke",
-    "Brain Aneurysms",
-    "AVMs & dAVFs",
-    "Carotid Stenosis",
-    "Intracranial Stenosis",
-    "Pulsatile Tinnitus",
-    "Cryptogenic Intracranial Haemorrhage",
-    "Spinal Vascular Disorders",
-    "Chronic SDH for MMA Embolisation"
-];
-
-const supportServices = [
-    "Neurovascular Image Review",
-    "Complex Neurovascular Consultation",
-    "Urgent Transfer Coordination",
-    "Multidisciplinary Case Discussions",
-    "Treatment Planning Assistance"
-];
+interface ReferralSection {
+    title: string;
+    sub_title: string;
+    description: string;
+    points: string[];
+}
 
 export default function ReferralScope() {
+    const [conditions, setConditions] = useState<ReferralSection | null>(null);
+    const [support, setSupport] = useState<ReferralSection | null>(null);
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/reffering`)
+            .then((res) => res.json())
+            .then((data) => {
+                // Mapping the array indices to your state
+                setConditions(data.referral_points[0]);
+                setSupport(data.referral_points[1]);
+            })
+            .catch(console.error);
+    }, []);
+
+    // Guard clause to prevent rendering while data is loading
+    if (!conditions || !support) return null;
+
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] overflow-hidden">
-            {/* Background Saturated Radial Gradients & Spheres */}
-            <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-tealAccent/15 blur-[130px] pointer-events-none z-0" />
-            <div className="absolute bottom-12 right-12 w-80 h-80 rounded-full border border-tealAccent/10 pointer-events-none z-0" />
-
             <div className="relative z-10 max-w-[1600px] mx-auto">
-                
-                {/* Section Header */}
                 <div className="max-w-3xl mb-16">
                     <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                         <span className="w-12 h-[1px] bg-tealAccent"></span>
@@ -44,39 +42,37 @@ export default function ReferralScope() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    
-                    {/* Column 1: Conditions */}
-                    <div className="bg-gradient-to-br from-white to-zinc-50/70 border border-zinc-200 rounded-2xl p-8 md:p-10 shadow-none">
-                        <h4 className="text-lg sm:text-xl font-serif font-bold text-deepNavy mb-6 flex items-center gap-3 border-b border-zinc-100 pb-4">
+                    {/* Conditions Column */}
+                    <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-10">
+                        <h4 className="text-lg font-serif font-bold text-deepNavy mb-6 flex items-center gap-3 border-b border-zinc-100 pb-4">
                             <HelpCircle className="w-5 h-5 text-tealAccent" />
-                            Common Referral Conditions
+                            {conditions.title}
                         </h4>
                         <ul className="space-y-4">
-                            {commonConditions.map((condition, idx) => (
-                                <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm sm:text-base font-light">
+                            {conditions.points.map((item, idx) => (
+                                <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm font-light">
                                     <CheckCircle2 className="w-5 h-5 text-tealAccent shrink-0 mt-0.5" />
-                                    <span>{condition}</span>
+                                    <span>{item}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Column 2: Support Services */}
-                    <div className="bg-gradient-to-br from-white to-zinc-50/70 border border-zinc-200 rounded-2xl p-8 md:p-10 shadow-none">
-                        <h4 className="text-lg sm:text-xl font-serif font-bold text-deepNavy mb-6 flex items-center gap-3 border-b border-zinc-100 pb-4">
+                    {/* Support Column */}
+                    <div className="bg-white border border-zinc-200 rounded-2xl p-8 md:p-10">
+                        <h4 className="text-lg font-serif font-bold text-deepNavy mb-6 flex items-center gap-3 border-b border-zinc-100 pb-4">
                             <FileSearch className="w-5 h-5 text-tealAccent" />
-                            Referral Support
+                            {support.title}
                         </h4>
                         <ul className="space-y-4">
-                            {supportServices.map((service, idx) => (
-                                <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm sm:text-base font-light">
+                            {support.points.map((item, idx) => (
+                                <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm font-light">
                                     <CheckCircle2 className="w-5 h-5 text-tealAccent shrink-0 mt-0.5" />
-                                    <span>{service}</span>
+                                    <span>{item}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
-
                 </div>
             </div>
         </section>

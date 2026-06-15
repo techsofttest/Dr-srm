@@ -1,20 +1,83 @@
 'use client';
-
 import React, { useState } from 'react';
 import InnerPageHero from '@/components/global/InnerPageHero';
 import Button from '@/components/global/Button';
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle2, Stethoscope } from 'lucide-react';
 
 export default function BookAppointmentClient() {
-    const [isSubmitted, setIsSubmitted] = useState(false);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const [loading, setLoading] = useState(false);
+ const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    type: '',
+    date:'',
+    time:'',
+    message:'',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // In a real application, you would send this to your API endpoint
-        setIsSubmitted(true);
-    };
+        setLoading(true);
+
+        const form = e.currentTarget;
+        const fData = new FormData(form);
+        const payload = {
+            name: fData.get('name'),
+            email: fData.get('email'),
+            phone: fData.get('phone'),
+            type: fData.get('type'),
+            date: fData.get('date'),
+            time: fData.get('time'),
+            message: fData.get('message'),
+        };
+
+       try {
+      setIsSubmitting(true);
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'; // Fallback to local Laravel port
+
+const response = await fetch(`${baseUrl}/book`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  body: JSON.stringify(payload),
+});
+
+      const data = await response.json();
+
+      // If response is not ok, parse the custom JSON error payload
+      if (!response.ok) {
+        throw new Error(data.error || data.message || 'Something went wrong. Please try again.');
+      }
+
+      setIsSubmitted(true);
+
+      form.reset();
+      // Reset form
+      setFormData({
+     name: '',
+        email: '',
+        phone: '',
+        type: '',
+        date:'',
+        time:'',
+        message:'',
+      });
+
+    } catch (error: any) {
+      console.error(error);
+      setErrorMessage(error.message || 'Failed to submit form');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
     return (
+ 
         <div className="flex-1 flex flex-col bg-zinc-50">
             <InnerPageHero
                 title="Book an Appointment"
@@ -62,7 +125,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Full Name *</label>
                                         <div className="relative">
                                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="text" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="John Doe" />
+                                            <input type="text" name="name" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="John Doe" />
                                         </div>
                                     </div>
                                     {/* Phone Number */}
@@ -70,7 +133,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Phone Number *</label>
                                         <div className="relative">
                                             <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="tel" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="+91 98765 43210" />
+                                            <input type="tel" name="phone" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="+91 98765 43210" />
                                         </div>
                                     </div>
                                     {/* Email */}
@@ -78,7 +141,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Email Address *</label>
                                         <div className="relative">
                                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input type="email" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="john@example.com" />
+                                            <input type="email" required name="email" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm" placeholder="john@example.com" />
                                         </div>
                                     </div>
                                     {/* Consultation Type */}
@@ -87,7 +150,7 @@ export default function BookAppointmentClient() {
                                         <div className="relative">
                                             <Stethoscope className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                                             <select
-                                                required
+                                                required name="type"
                                                 defaultValue=""
                                                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none"
                                             >
@@ -102,7 +165,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Preferred Date *</label>
                                         <div className="relative">
                                             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                                            <input type="date" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700" />
+                                            <input type="date" name="date" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700" />
                                         </div>
                                     </div>
                                     {/* Preferred Time */}
@@ -111,7 +174,7 @@ export default function BookAppointmentClient() {
                                         <div className="relative">
                                             <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                                             <select
-                                                required
+                                                required name="time"
                                                 defaultValue=""
                                                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none"
                                             >
@@ -127,7 +190,7 @@ export default function BookAppointmentClient() {
                                         <label className="block text-sm font-bold text-deepNavy mb-2">Message / Reason for Visit *</label>
                                         <div className="relative">
                                             <FileText className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
-                                            <textarea required rows={4} className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm resize-none" placeholder="Please describe your symptoms or reason for consultation..."></textarea>
+                                            <textarea required name="message" rows={4} className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm resize-none" placeholder="Please describe your symptoms or reason for consultation..."></textarea>
                                         </div>
                                     </div>
                                 </div>

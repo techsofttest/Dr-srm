@@ -1,33 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Phone, Users, ShieldAlert, CheckCircle, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-const referralConditions = [
-    "Large Vessel Occlusion Stroke",
-    "Brain Aneurysms (Ruptured & Unruptured)",
-    "AVMs (Arteriovenous Malformations)",
-    "dAVFs (Dural Arteriovenous Fistulas)",
-    "Carotid Stenosis",
-    "Intracranial Stenosis",
-    "Pulsatile Tinnitus",
-    "Cryptogenic Intracranial Haemorrhage",
-    "Spinal Vascular Disorders",
-    "Chronic SDH for MMA Embolisation"
-];
-
-const referralSupport = [
-    "Neurovascular Image Review",
-    "Complex Neurovascular Consultation",
-    "Urgent Transfer Coordination",
-    "Multidisciplinary Case Discussions",
-    "Treatment Planning Assistance"
-];
+interface reffData{
+    title:string;
+    description:string;
+    refferal: string[];  
+}
 
 export default function ReferringDoctors() {
+  const [reffering, setData] = useState<reffData[]>([]);
+
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
+            .then(res => res.json())
+            .then(json => setData(json.reffering || []))
+            .catch(err => console.error(err));
+    }, []);
+
+    const getByTitle = (title: string) => reffering.find(item => item.title === title);
+
+    const intro = getByTitle("For Referring Doctors");
+    const commitment = getByTitle("Physician Communication Commitment");
+    const conditions = getByTitle("Common Referral Conditions");
+    const support = getByTitle("Referral Support");
+
     return (
         <section id="referring-doctors" className="relative w-full py-24 bg-deepNavy text-white px-5 md:px-[80px] overflow-hidden">
             {/* Background decorative image and circles */}
@@ -53,11 +54,9 @@ export default function ReferringDoctors() {
                                 Medical Portal
                             </h2>
                             <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif leading-tight mb-6">
-                                For Referring Doctors
+                               {intro?.title}
                             </h3>
-                            <p className="text-white/70 text-sm sm:text-base leading-relaxed mb-8 font-light">
-                                Collaborative care models and rapid clinical coordination to streamline assessments, imaging reviews, and emergency patient transfers for acute vascular events.
-                            </p>
+                            <p className="text-white/70 text-sm sm:text-base leading-relaxed mb-8 font-light">{intro?.description}</p>
                         </div>
 
                         {/* Dedicated Hotline Callout Card */}
@@ -87,11 +86,9 @@ export default function ReferringDoctors() {
                         <div className="bg-white/[0.03] border border-white/15 backdrop-blur-sm rounded-3xl p-8 hover:border-tealAccent/45 transition-all duration-300">
                             <h4 className="text-xs font-bold text-tealAccent uppercase tracking-widest mb-3 flex items-center gap-2">
                                 <Users className="w-4 h-4" />
-                                <span>Physician Communication Commitment</span>
+                                <span>{commitment?.title}</span>
                             </h4>
-                            <p className="text-sm sm:text-base text-white/90 leading-relaxed font-light">
-                                Referring physicians receive timely communication regarding imaging findings, treatment decisions, procedural outcomes, and follow-up recommendations to ensure continuity of patient care.
-                            </p>
+                            <p className="text-sm sm:text-base text-white/90 leading-relaxed font-light">{commitment?.description}</p>
                         </div>
 
                         {/* Split Grid for Conditions and Support */}
@@ -102,11 +99,9 @@ export default function ReferringDoctors() {
                                 <h4 className="text-xs font-bold text-tealAccent uppercase tracking-widest mb-4">
                                     Diagnostics & Indications
                                 </h4>
-                                <h5 className="text-lg font-serif font-bold mb-6 text-white pb-3 border-b border-white/20">
-                                    Common Referral Conditions
-                                </h5>
+                                <h5 className="text-lg font-serif font-bold mb-6 text-white pb-3 border-b border-white/20">{conditions?.title}</h5>
                                 <ul className="space-y-3">
-                                    {referralConditions.map((cond, idx) => (
+                                    {conditions?.refferal.map((cond, idx) => (
                                         <li key={idx} className="flex items-start gap-2.5 text-sm text-white/90">
                                             <CheckCircle className="w-4 h-4 text-tealAccent shrink-0 mt-0.5" />
                                             <span className="font-light">{cond}</span>
@@ -120,14 +115,12 @@ export default function ReferringDoctors() {
                                 <h4 className="text-xs font-bold text-tealAccent uppercase tracking-widest mb-4">
                                     Services For Physicians
                                 </h4>
-                                <h5 className="text-lg font-serif font-bold mb-6 text-white pb-3 border-b border-white/20">
-                                    Referral Support
-                                </h5>
+                                <h5 className="text-lg font-serif font-bold mb-6 text-white pb-3 border-b border-white/20">{support?.title}</h5>
                                 <ul className="space-y-3">
-                                    {referralSupport.map((support, idx) => (
+                                    {support?.refferal.map((sup, idx) => (
                                         <li key={idx} className="flex items-start gap-2.5 text-sm text-white/90">
                                             <ArrowRight className="w-4 h-4 text-tealAccent shrink-0 mt-0.5" />
-                                            <span className="font-light">{support}</span>
+                                            <span className="font-light">{sup}</span>
                                         </li>
                                     ))}
                                 </ul>
