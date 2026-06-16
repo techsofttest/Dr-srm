@@ -41,7 +41,7 @@ const [banner, setBanner] = useState<Banner | null>(null);
               <div
     className="absolute inset-0 bg-cover bg-center md:bg-right bg-no-repeat opacity-50 md:opacity-85"
     style={{ 
-        backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL_BASE || ''}${banner.image}')` 
+        backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL_BASE || ''}/${banner.image}'), url('/hero-sec/soumya7.png')` 
     }}
 />
                 {/* Responsive gradient masks for text readability */}

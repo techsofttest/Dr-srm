@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    logging: {
+        fetches: {
+            fullUrl: true,
+        },
+    },
     images: {
         unoptimized: true, // Set to false to enable Next.js image optimization
         remotePatterns: [
@@ -11,7 +16,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'drsoumyaranjanmalla.com',
+                hostname: 'techsoftwebsolutions.com/techsoft/demo/Dr_srm/public/',
                 port: '',
                 pathname: '/uploads/**',
             },
