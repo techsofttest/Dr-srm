@@ -74,16 +74,14 @@ function AnimatedCounter({ target, suffix }: { target: number; suffix: string })
 // ── Stat Card ─────────────────────────────────────────────────────────────────
 
 function StatCard({ stat, idx }: { stat: StatData; idx: number }) {
-    const cardRef = useRef<HTMLDivElement>(null);
-    const inView = useInView(cardRef, { once: true, margin: '-60px' });
     // Map the string from API to the corresponding Lucide icon component
     const Icon = icons[idx % icons.length];
 
     return (
         <motion.div
-            ref={cardRef}
             initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.5, delay: idx * 0.08 }}
             className="group relative bg-white/5 border border-white/20 rounded-2xl p-6 overflow-hidden hover:bg-white/10 hover:border-tealAccent/30 transition-all duration-300"
         >
@@ -107,8 +105,6 @@ function StatCard({ stat, idx }: { stat: StatData; idx: number }) {
 
 export default function AboutAndProcedures() {
     const [data, setData] = useState<PageData | null>(null);
-    const statsRef = useRef<HTMLDivElement>(null);
-    const statsInView = useInView(statsRef, { once: true, margin: '-80px' });
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
@@ -162,7 +158,7 @@ export default function AboutAndProcedures() {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-deepNavy/70 via-transparent to-transparent" />
-                                    
+
                                     {/* Name badge at bottom of image */}
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/30 rounded-xl px-4 py-3">
@@ -282,12 +278,13 @@ export default function AboutAndProcedures() {
                     <div className="absolute inset-0 bg-gradient-to-b from-deepNavy/80 via-deepNavy/40 to-deepNavy/90" />
                 </div>
 
-                <div ref={statsRef} className="relative z-10 max-w-[1600px] mx-auto">
+                <div className="relative z-10 max-w-[1600px] mx-auto">
 
                     {/* Header */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
-                        animate={statsInView ? { opacity: 1, y: 0 } : {}}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
                         transition={{ duration: 0.7 }}
                         className="text-center mb-16"
                     >
