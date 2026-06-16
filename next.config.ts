@@ -16,7 +16,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'techsoftwebsolutions.com/techsoft/demo/Dr_srm/public/',
+                hostname: 'www.techsoftwebsolutions.com/techsoft/demo/Soumya_Rajan_Malla/public',
                 port: '',
                 pathname: '/uploads/**',
             },
