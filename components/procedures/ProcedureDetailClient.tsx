@@ -28,7 +28,11 @@ const iconMap: Record<string, React.ElementType> = {
 function getIcon(name?: string): React.ElementType {
     return iconMap[name?.toLowerCase() ?? ''] ?? ShieldAlert;
 }
-
+interface More{
+    title :string,
+    slug:string,
+    icon: string;
+}
 interface RelatedLink {
     label: string;
     href: string;
@@ -67,6 +71,7 @@ export default function ProcedureDetailClient({ data }: Props) {
     const params = useParams();
     const slug = params.slug as string | undefined;
     const [procedureData, setData] = useState<ProcedureFetchData | null>(null);
+    const [otherProcedures, setMore] = useState<More[]>([]);
             
     const getYoutubeVideoId = (url?: string) => {
         if (!url) return null;
@@ -86,6 +91,8 @@ export default function ProcedureDetailClient({ data }: Props) {
                     `${process.env.NEXT_PUBLIC_API_URL}/procedure/${slug}`
                 );
                 const json = await res.json();
+                const otherProcedures = json.otherProcedures;
+                setMore(otherProcedures);
                 const procedure = json.procedure;
                 // const sections = procedure.overview || [];
 
@@ -121,7 +128,6 @@ export default function ProcedureDetailClient({ data }: Props) {
         );
     }
 
-    const otherProcedures = procedures.filter((p) => p.slug !== procedureData.slug);
 
     return (
         <main className="relative min-h-screen flex flex-col bg-white">
@@ -276,7 +282,7 @@ export default function ProcedureDetailClient({ data }: Props) {
                                 </h4>
                                 <div className="flex flex-col gap-2">
                                     {otherProcedures.map((proc) => {
-                                        const ProcIcon = getIcon(proc.iconName);
+                                        const ProcIcon = getIcon(proc.icon);
                                         return (
                                             <Link
                                                 key={proc.slug}
@@ -288,7 +294,7 @@ export default function ProcedureDetailClient({ data }: Props) {
                                                         <ProcIcon className="w-4 h-4" />
                                                     </div>
                                                     <span className="text-sm font-medium text-slate-700 group-hover:text-deepNavy transition-colors line-clamp-1">
-                                                        {proc.heroTitle}
+                                                        {proc.title}
                                                     </span>
                                                 </div>
                                                 <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-tealAccent transition-colors shrink-0" />
