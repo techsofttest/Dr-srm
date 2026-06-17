@@ -35,7 +35,6 @@ export default async function ProcedureDetailPage(
         <>
             <Header />
             <ProcedureDetailClient data={data} />
-            <Footer />
         </>
     );
 }
