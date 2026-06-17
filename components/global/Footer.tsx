@@ -22,7 +22,7 @@ const footerNavLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Conditions Treated', href: '/conditions' },
-    { name: 'Procedures', href: '/#procedures' },
+    { name: 'Procedures', href: '/procedures' },
     { name: 'Patient Education', href: '/patient-education' },
     { name: 'For Referring Doctors', href: '/referring-doctors' },
     { name: 'Academic Profile', href: '/academic-profile' },
@@ -47,8 +47,13 @@ export default function Footer() {
                 <div className="w-full py-4 border-b border-white/10 mb-12 flex flex-wrap items-center justify-between gap-4 text-xs md:text-sm font-medium text-white/70">
                     <span className="text-tealAccent font-bold uppercase tracking-wider">Areas of Focus:</span>
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
-                      {[...data.conditions, ...data.procedure].map((item, idx) => (
-                            <Link key={idx} href={`/${item.slug}`} className="hover:text-tealAccent transition-colors">
+                        {data.conditions.map((item, idx) => (
+                            <Link key={`cond-${idx}`} href={`/conditions/${item.slug}`} className="hover:text-tealAccent transition-colors">
+                                {item.name}
+                            </Link>
+                        ))}
+                        {data.procedure.map((item, idx) => (
+                            <Link key={`proc-${idx}`} href={`/procedures/${item.slug}`} className="hover:text-tealAccent transition-colors">
                                 {item.name}
                             </Link>
                         ))}
@@ -105,19 +110,19 @@ export default function Footer() {
                         <div className="flex flex-col gap-4 text-sm text-white/70">
                             <div className="leading-relaxed flex items-start gap-2">
                                 <MapPin className="w-4 h-4 text-tealAccent shrink-0 mt-1" />
-                                
-                                     <div className="text-white/70">
-                                        {/* The Bold Header */}
-                                        <strong className="text-white block font-medium">
-                                            {data.contact.place}
-                                        </strong>
-                                        
-                                        {/* The Remaining Address */}
-                                        <span className="text-sm font-light leading-relaxed">
-                                            {data.contact.address.replace(data.contact.place, '').trim()}
-                                        </span>
-                                    </div>
-                                
+
+                                <div className="text-white/70">
+                                    {/* The Bold Header */}
+                                    <strong className="text-white block font-medium">
+                                        {data.contact.place}
+                                    </strong>
+
+                                    {/* The Remaining Address */}
+                                    <span className="text-sm font-light leading-relaxed">
+                                        {data.contact.address.replace(data.contact.place, '').trim()}
+                                    </span>
+                                </div>
+
                             </div>
                             <a
                                 href={data.contact?.location}
