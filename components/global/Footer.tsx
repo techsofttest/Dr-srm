@@ -27,6 +27,7 @@ const footerNavLinks = [
     { name: 'For Referring Doctors', href: '/referring-doctors' },
     { name: 'Academic Profile', href: '/academic-profile' },
     { name: 'Contact', href: '/contact' },
+     { name: 'Blog', href: '/blogs' },
 ];
 
 export default function Footer() {
@@ -49,12 +50,12 @@ export default function Footer() {
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
                         {data.conditions.map((item, idx) => (
                             <Link key={`cond-${idx}`} href={`/conditions/${item.slug}`} className="hover:text-tealAccent transition-colors">
-                                {item.name}
+                               {idx > 0 && <span className="text-white/20">•</span>}  {item.name}
                             </Link>
                         ))}
                         {data.procedure.map((item, idx) => (
                             <Link key={`proc-${idx}`} href={`/procedures/${item.slug}`} className="hover:text-tealAccent transition-colors">
-                                {item.name}
+                                {idx > 0 && <span className="text-white/20">•</span>} {item.name}
                             </Link>
                         ))}
                     </div>

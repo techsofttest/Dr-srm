@@ -248,9 +248,9 @@ export default function Header() {
                                             className="absolute top-full left-0 mt-1 w-52 bg-[#0a1628] border border-white/20 rounded-xl py-2 z-50"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            {item.children!.map((child) => (
+                                            {item.children!.map((child,idx) => (
                                                 <Link
-                                                    key={child.name}
+                                                    key={idx}
                                                     href={child.href}
                                                     onClick={() => setOpenDropdown(null)}
                                                     className="block px-4 py-2 text-[12px] text-white/70 hover:text-tealAccent hover:bg-white/5 transition-colors"

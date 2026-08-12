@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
-// Import your global footer and sticky contact buttons
 import Footer from "@/components/global/Footer";
 import StickyContactButtons from "@/components/global/StickyContactButtons";
 
@@ -69,10 +69,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <Script
+      id="json-ld"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
       </head>
       <body className="min-h-full flex flex-col bg-white text-slate-900 selection:bg-tealAccent selection:text-white">
 
