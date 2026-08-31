@@ -6,7 +6,7 @@ interface CaseStudy {
     sub_title: string;
     title: string;
     description: string;
-    patient: string; // Ensure your API includes this field if needed
+    patient: string; 
 }
 
 export default function CaseReviews() {
@@ -65,9 +65,9 @@ export default function CaseReviews() {
                                 <h4 className="text-xl font-serif font-bold text-deepNavy mb-3">
                                     {item.title}
                                 </h4>
-                                <p className="text-sm text-slate-600 leading-relaxed font-light">
-                                    {item.description}
-                                </p>
+                                <div className="text-sm text-slate-600 leading-relaxed font-light" dangerouslySetInnerHTML={{__html:item.description}}/>
+                                   
+                                
                             </div>
                         </div>
                     ))}

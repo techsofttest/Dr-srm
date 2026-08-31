@@ -6,11 +6,20 @@ import { ShieldCheck, Star, ArrowRight, ChevronLeft, ChevronRight } from 'lucide
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-interface caseStudies{
-    sub_title:string,
-    title:string,
-    description:string,
-    patient:string,
+interface CaseStudy {
+    sub_title: string;
+    title: string;
+    description: string;
+    patient: string;
+}
+
+interface PatientStoryData {
+    span: string;
+    title: string;
+    subtitle: string;
+    subspan: string;
+    description: string;
+    image: string;
 }
 
 const googleReviews = [
@@ -79,7 +88,7 @@ export default function Testimonials() {
 
     const scroll = (direction: 'left' | 'right') => {
         if (containerRef.current) {
-            const { scrollLeft, clientWidth } = containerRef.current;
+            const { clientWidth } = containerRef.current;
             const scrollAmount = direction === 'left' ? -clientWidth : clientWidth;
             containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
@@ -90,16 +99,18 @@ export default function Testimonials() {
         window.addEventListener('resize', checkScroll);
         return () => window.removeEventListener('resize', checkScroll);
     }, []);
-    const [casestudy, setcaseStudies] = useState<caseStudies[]>([]);
+
+    const [caseStudiesData, setCaseStudiesData] = useState<CaseStudy[]>([]);
+    const [patientStoryData, setPatientStoryData] = useState<PatientStoryData | null>(null);
     const [loading, setLoading] = useState(true);
     
-        useEffect(() => {
+    useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
             .then(res => res.json())
             .then(data => {
-                // Check if the data object has the 'casestudy' key
                 if (data.casestudy) {
-                    setcaseStudies(data.casestudy);
+                    setCaseStudiesData(data.casestudy);
+                    setPatientStoryData(data.patientstory);
                 } else {
                     console.error("The 'casestudy' key was not found in the API response.");
                 }
@@ -117,7 +128,6 @@ export default function Testimonials() {
             {/* Background trust badge watermark */}
             <div className="absolute right-10 top-1/4 w-[320px] h-[320px] text-tealAccent/[0.02] pointer-events-none select-none z-0">
                 <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
-                    {/* Circle badge representing safety & verified checkmark */}
                     <circle cx="50" cy="50" r="42" strokeDasharray="4 4" />
                     <circle cx="50" cy="50" r="36" />
                     <path d="M38 52 L46 60 L64 40" strokeWidth="3" />
@@ -132,14 +142,14 @@ export default function Testimonials() {
                     <div className="max-w-3xl mb-12">
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent"></span>
-                            Patient Stories
+                            {patientStoryData?.span || "Patient Stories"}
                         </h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-4">
-                            Clinical Case Reviews
+                            {patientStoryData?.title || "Real Outcomes, Restored Lives"}
                         </h3>
                         <p className="text-xs text-slate-500 italic flex items-center gap-2">
                             <ShieldCheck className="w-4 h-4 text-tealAccent" />
-                            <span>(Published only with appropriate patient consent and privacy safeguards.)</span>
+                            <span>{patientStoryData?.subtitle || "Verified clinical successes and patient recovery accounts"}</span>
                         </p>
                     </div>
 
@@ -147,25 +157,27 @@ export default function Testimonials() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         
                         {/* Trust Hero Image Card */}
-                        <div className="relative rounded-3xl overflow-hidden min-h-[350px] border border-slate-300 flex flex-col justify-end p-8 group shadow-none">
-                            <Image
-                                src="/patient_doctor_consult.png"
-                                alt="Dr. Soumya Rajan patient consultation"
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
+                        <div className="relative rounded-3xl overflow-hidden min-h-[350px] border border-slate-300 flex flex-col justify-end p-8 group shadow-none bg-slate-100">
+                            {patientStoryData?.image && (
+                                <Image
+                                    src={patientStoryData.image}
+                                    alt="Dr. Soumya Rajan patient consultation"
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                />
+                            )}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1B3D] via-[#0B1B3D]/50 to-transparent z-10" />
                             <div className="relative z-20">
                                 <span className="text-[10px] font-bold tracking-widest uppercase text-tealAccent bg-tealAccent/20 px-2.5 py-1 rounded-md mb-3 inline-block">
-                                    Trust &amp; Care
+                                    {patientStoryData?.subspan || "Featured Case"}
                                 </span>
                                 <h4 className="text-xl font-serif font-bold text-white leading-tight">
-                                    Clinical Excellence &amp; Patient-First Care
+                                    {patientStoryData?.description || "Dedicated neurovascular care with proven clinical excellence."}
                                 </h4>
                             </div>
                         </div>
 
-                        {casestudy.map((study, idx) => (
+                        {caseStudiesData.map((study, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }}
@@ -184,9 +196,7 @@ export default function Testimonials() {
                                     <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-4">
                                         {study.patient}
                                     </p>
-                                    <p className="text-sm text-slate-600 leading-relaxed font-light">
-                                        {study.description}
-                                    </p>
+                                    <div className="text-sm text-slate-600 leading-relaxed font-light" dangerouslySetInnerHTML={{ __html: study.description }} />
                                 </div>
                             </motion.div>
                         ))}

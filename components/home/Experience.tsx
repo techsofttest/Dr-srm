@@ -63,7 +63,7 @@ useEffect(() => {
                     >
                         {/* Background Image Container */}
                         <Image
-                            src="/experience/Renai Medicity, Kochi.webp"
+                            src={card?.image}
                             alt="Renai Medicity, Kochi"
                             fill
                             sizes="(max-width: 1024px) 100vw, 60vw"
