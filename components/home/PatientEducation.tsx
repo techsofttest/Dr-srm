@@ -13,7 +13,7 @@ interface TopicData{
 interface EduData{
     span:string,
     title:string,
-    discription:string,
+    description:string,
     linkedin:string,
 }
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -64,7 +64,7 @@ export default function PatientEducation() {
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-6">
                            {patientedu?.title}
                         </h3>
-                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">{patientedu?.discription}</p>
+                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">{patientedu?.description}</p>
 
                         <a
                             href={patientedu?.linkedin}

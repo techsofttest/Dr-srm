@@ -35,8 +35,8 @@ export default function FAQ() {
                 if (data.faq && Array.isArray(data.faq)) {
                     setFaqList(data.faq);
                 }
-                if (data.faqData) {
-                    setFaqHeader(data.faqData);
+                if (data.faqdata) {
+                    setFaqHeader(data.faqdata);
                 }
             } catch (err) {
                 console.error("Error fetching faq:", err);
