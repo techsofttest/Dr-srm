@@ -10,6 +10,12 @@ interface TopicData{
     content:string,
     href:string,
 }
+interface EduData{
+    span:string,
+    title:string,
+    discription:string,
+    linkedin:string,
+}
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
         viewBox="0 0 24 24"
@@ -23,6 +29,7 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export default function PatientEducation() {
     const [topics, setTopics] = useState<TopicData[]>([]);
+    const [patientedu, setpatientedu] = useState<EduData | null>(null);
     const [loading, setLoading] = useState(true);
 
      useEffect(() => {
@@ -32,6 +39,7 @@ export default function PatientEducation() {
                 // Check if the data object has the 'casestudy' key
                 if (data.topics) {
                     setTopics(data.topics);
+                    setpatientedu(data.patientedu);
                 } else {
                     console.error("The 'casestudy' key was not found in the API response.");
                 }
@@ -51,17 +59,15 @@ export default function PatientEducation() {
                     <div className="w-full lg:w-4/12 lg:sticky lg:top-36 self-start">
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent"></span>
-                            Information Hub
+                           {patientedu?.span}
                         </h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-6">
-                            Patient Education Centre
+                           {patientedu?.title}
                         </h3>
-                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">
-                            Short videos, patient guides, educational articles, and infographics designed to help patients and families understand complex neurovascular conditions and interventional treatment options.
-                        </p>
+                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">{patientedu?.discription}</p>
 
                         <a
-                            href="https://www.linkedin.com/in/soumyaranjanmalla"
+                            href={patientedu?.linkedin}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-deepNavy border border-navyLight/50 hover:bg-navyLight hover:border-tealAccent text-white font-bold text-xs tracking-wider transition-all uppercase w-full sm:w-auto"

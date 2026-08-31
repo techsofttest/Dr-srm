@@ -152,7 +152,7 @@ export default function Contact() {
 
                         {/* Email Enquiry */}
                         <a 
-                            href={`mailto:{contact?.email}`}
+                            href={`mailto:${contact?.email}`}
                             className="bg-bgLight/50 border border-slate-300 hover:border-tealAccent/40 hover:bg-bgLight rounded-2xl p-8 flex flex-col justify-between group transition-all duration-300 animate-none"
                         >
                             <div className="p-3 bg-white border border-slate-300 text-tealAccent rounded-xl w-fit mb-8 group-hover:scale-105 transition-transform duration-300">

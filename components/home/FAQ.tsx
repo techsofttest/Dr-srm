@@ -2,39 +2,48 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface faqData{
-    question:string;
-    answer:string;
+interface FaqItem {
+    question: string;
+    answer: string;
 }
+
+interface FaqHeaderData {
+    span: string;
+    title: string;
+    description: string;
+}
+
 export default function FAQ() {
-    const [faq, setPro] = useState<faqData[]>([]);
+    const [faqList, setFaqList] = useState<FaqItem[]>([]);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [faqHeader, setFaqHeader] = useState<FaqHeaderData | null>(null);
 
     const toggleFAQ = (index: number) => {
-        if (openIndex === index) {
-            setOpenIndex(null);
-        } else {
-            setOpenIndex(index);
+        setOpenIndex(openIndex === index ? null : index);
+    };
+
+    useEffect(() => {
+        async function fetchFaq() {
+            try {
+                // Aligning environment variable usage with other components
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`);
+                const data = await res.json();
+                
+                if (data.faq && Array.isArray(data.faq)) {
+                    setFaqList(data.faq);
+                }
+                if (data.faqData) {
+                    setFaqHeader(data.faqData);
+                }
+            } catch (err) {
+                console.error("Error fetching faq:", err);
+            }
         }
-             };
-           useEffect(() => {
-               async function fetchFaq() {
-                   try {
-                       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-                       const data = await res.json();
-                       // Extracting 'services' from the consolidated page data object
-                       if (data.faq && Array.isArray(data.faq)) {
-                           setPro(data.faq);
-                       }
-                   } catch (err) {
-                       console.error("Error fetching faq:", err);
-                   }
-               }
-               fetchFaq();
-           }, []);
+        fetchFaq();
+    }, []);
 
     return (
         <section id="faq" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
@@ -53,20 +62,20 @@ export default function FAQ() {
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center justify-center gap-3">
                         <span className="w-12 h-[1px] bg-tealAccent"></span>
-                        FAQ
+                        {faqHeader?.span || "FAQ"}
                         <span className="w-12 h-[1px] bg-tealAccent"></span>
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                        Frequently Asked Questions
+                       {faqHeader?.title || "Frequently Asked Questions"}
                     </h3>
                     <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
-                        Clear clinical answers to common questions regarding neurovascular diagnostics and minimally invasive treatments.
+                        {faqHeader?.description || "Find clear answers regarding neurovascular procedures, recovery, and consultations."}
                     </p>
                 </div>
 
                 {/* Accordion List */}
                 <div className="space-y-4 max-w-4xl mx-auto">
-                    {faq.map((faq, idx) => {
+                    {faqList.map((faq, idx) => {
                         const isOpen = openIndex === idx;
                         return (
                             <div 
