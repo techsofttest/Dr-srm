@@ -5,16 +5,6 @@ import Image from 'next/image';
 import { Award, ShieldCheck, Eye, Activity, Globe, HeartPulse } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-interface Highlight {
-    title: string;
-    description: string;
-}
-
-interface Excellence {
-    title: string;
-    content: string;
-}
-
 const icons = [Award, ShieldCheck, Eye, Activity, Globe, HeartPulse];
 const iconAnims = [
     { animate: { y: [0, -5, 0] }, transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' as const } },
@@ -24,24 +14,7 @@ const iconAnims = [
     { animate: { rotate: [0, 360] }, transition: { duration: 8, repeat: Infinity, ease: 'linear' as const, delay: 0 } },
     { animate: { scale: [1, 1.2, 1, 1.15, 1] }, transition: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' as const, delay: 0.4 } },
 ];
-
-export default function WhyChoose() {
-    const [highlights, setHighlights] = useState<Highlight[]>([]);
-    const [excellence, setExcellence] = useState<Excellence | null>(null);
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-                const data = await res.json();
-                if (data.highlights) setHighlights(data.highlights);
-                if (data.excellence) setExcellence(data.excellence);
-            } catch (error) {
-                console.error("Failed to fetch WhyChoose data:", error);
-            }
-        }
-        fetchData();
-    }, []);
+export default function WhyChoose({highlight,excellence}:{highlight:any[],excellence:any}) {
 
     return (
         <section className="relative w-full pt-24 pb-32 bg-bgLight px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
@@ -80,16 +53,16 @@ export default function WhyChoose() {
                         Why Choose
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                        {excellence?.title || "Excellence in Neurointerventional Care"}
+                        {excellence?.title || ""}
                     </h3>
                     <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
-                        {excellence?.content || "A clinical methodology anchored in India's top medical institutes, global standard protocols, and extensive procedural experience."}
+                        {excellence?.content || ""}
                     </p>
                 </div>
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {highlights.map((pillar, idx) => {
+                    {highlight.map((pillar, idx) => {
                         const IconComponent = icons[idx % icons.length];
                         const anim = iconAnims[idx % iconAnims.length];
 

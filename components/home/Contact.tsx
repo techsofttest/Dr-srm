@@ -4,28 +4,9 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Phone, MessageSquare, Mail, MapPin, Clock, AlertCircle, ArrowRight } from 'lucide-react';
 import WhatsAppIcon from '@/components/global/WhatsAppIcon';
+export default function Contact({contact}:{contact:any}) {
 
-interface ContactData {
-    address: string;
-    location: string;
-    phone: string;
-    email: string;
-    whatsapp: string;
-    orcid: string;
-    linkedin: string;
-    available: string;
-}
-export default function Contact() {
-    const [contact, setContact] = useState<ContactData | null>(null);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`) // Adjust endpoint if needed
-            .then(res => res.json())
-            .then(json => setContact(json.contact))
-            .catch(err => console.error("Failed to fetch contact data", err));
-    }, []);
-
-    if (!contact) return null; // Or a loading skeleton
+    if (!contact) return null; 
     return (
         <section id="contact" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
             {/* Background decorative image */}

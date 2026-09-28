@@ -4,21 +4,26 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Award, GraduationCap, ShieldCheck, ArrowRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+interface data{
+   education:{    
+     cms_title:string;
+    image:string;
+    heading: string;
+    items: string[];
+}
+  observerships:{    
+     category:string;
+    title:string;
+    institution: string;
+}[];
+affiliations:{
+    heading: string;
+    international: string[];
+    national: string[];
+}
+}
 
-
-export default function Education() {
-const [education, setEducation] = useState({
-    cms_title: '',
-    image:'',
-    heading: '',
-    items: [],
-});
-const [observerships, setObserverships] = useState<any[]>([]);
-const [affiliations, setAffiliations] = useState({
-    heading: '',
-    international: [],
-    national: [],
-});
+export default function Education({education,observerships,affiliations}:data) {
     const timelineRef = React.useRef<HTMLDivElement>(null);
 
     // Line height is driven by scroll position through the timeline
@@ -27,26 +32,7 @@ const [affiliations, setAffiliations] = useState({
         offset: ['start 0.8', 'end 0.2'],
     });
     const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
-        .then((res) => res.json())
-        .then((data) => {
-           setEducation(data.education || {
-    cms_title: '',
-     heading: '',
-    items: [],
-});
-            setObserverships(data.observerships || []);
-            setAffiliations(
-                data.affiliations || {
-                    heading: '',
-                    international: [],
-                    national: [],
-                }
-            );
-        })
-        .catch(console.error);
-}, []);
+
     return (
         <section id="academic-profile" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-100 overflow-hidden">
             {/* Background decorative image */}

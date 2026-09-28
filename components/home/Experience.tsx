@@ -5,20 +5,8 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Building2 } from 'lucide-react';
 
-export default function Experience() {
-    // Inside your Experience component
-const [intro, setIntro] = useState<any>(null);
-const [card, setCard] = useState<any>(null);
+export default function Experience({card,intro}:{card:any,intro:any}) {
 
-useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
-        .then((res) => res.json())
-        .then((data) => {
-            setIntro(data.intro);
-            setCard(data.card);
-        })
-        .catch((err) => console.error("Fetch Error:", err));
-}, []);
 
     return (
         <section className="w-full py-24 bg-bgLight overflow-hidden border-b border-slate-200">

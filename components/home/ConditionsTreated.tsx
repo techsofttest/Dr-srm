@@ -9,7 +9,14 @@ interface ServiceCategory {
     title: string;
     subtitle: string;
     image: string;
-    items: { name: string; description: string }[];
+    items: {
+        name: string;
+        description: string;
+    }[];
+}
+
+interface ConditionsTreatedProps {
+    services: ServiceCategory[];
 }
 
 function ConditionCard({ cat, idx }: { cat: ServiceCategory; idx: number }) {
@@ -61,24 +68,8 @@ function ConditionCard({ cat, idx }: { cat: ServiceCategory; idx: number }) {
     );
 }
 
-export default function ConditionsTreated() {
-    const [services, setCategories] = useState<ServiceCategory[]>([]);
+export default function ConditionsTreated({services}:ConditionsTreatedProps) {
 
-    useEffect(() => {
-        async function fetchServices() {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-                const data = await res.json();
-                // Extracting 'services' from the consolidated page data object
-                if (data.services && Array.isArray(data.services)) {
-                    setCategories(data.services);
-                }
-            } catch (err) {
-                console.error("Error fetching services:", err);
-            }
-        }
-        fetchServices();
-    }, []);
 
     return (
         <section id="conditions" className="relative w-full py-24 bg-bgLight px-5 md:px-[80px] border-b border-slate-100 overflow-hidden">

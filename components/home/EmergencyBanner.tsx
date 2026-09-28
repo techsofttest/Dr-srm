@@ -5,38 +5,9 @@ import { ShieldAlert, PhoneCall } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-interface emergency{
-    title: string;
-    content: string;
-    link: {
-        url: string;
-        text: string;
-    };
-    image: string;
-}
 
-export default function EmergencyBanner() {
-    const [emergency, setEmergency] = useState<emergency | null>(null);
-    const [loading, setLoading] = useState(true);
-    
-     useEffect(() => {
-        async function fetchemergency() {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-                const data = await res.json();
-                if (data.emergency) { 
-                    setEmergency(data.emergency); 
-                }
-            } catch (error) {
-                console.error("Failed to fetch emergency:", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchemergency();
-    }, []);
-    if (loading) return <div>Loading...</div>;
-    if (!emergency) return null;
+export default function EmergencyBanner({emergency}:{emergency:any}) {
+
     return (
         <section
             id="emergency-stroke"

@@ -14,14 +14,16 @@ const ICONS = {
 
 type IconName = keyof typeof ICONS;
 
-// ── Animated neural network background ───────────────────────────────────────
-interface ProData {
+interface Procedure {
     title: string;
     description: string;
     icon: IconName;
     techniques: string[];
 }
-// Nodes: [x%, y%] positions in the SVG viewBox (0–100 × 0–100)
+
+interface ProData {
+    pro: Procedure[];
+}
 const NODES: [number, number][] = [
     [8, 8], [25, 4], [44, 7], [62, 3], [80, 10], [94, 6],
     [5, 30], [22, 25], [40, 22], [57, 28], [74, 20], [92, 30],
@@ -141,24 +143,8 @@ function NeuralNetworkBg() {
 }
 
 
-export default function SpecialisedProcedures() {
-    const [pro, setPro] = useState<ProData[]>([]);
-   
-       useEffect(() => {
-           async function fetchProcedure() {
-               try {
-                   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-                   const data = await res.json();
-                   // Extracting 'services' from the consolidated page data object
-                   if (data.pro && Array.isArray(data.pro)) {
-                       setPro(data.pro);
-                   }
-               } catch (err) {
-                   console.error("Error fetching services:", err);
-               }
-           }
-           fetchProcedure();
-       }, []);
+export default function SpecialisedProcedures({ pro }: ProData) {
+
     return (
         <section id="procedures" className="relative w-full py-24 bg-deepNavy text-white px-5 md:px-[80px] overflow-hidden">
             {/* Animated neural network */}

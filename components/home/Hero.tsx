@@ -3,36 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, AlertCircle, UserPlus, ArrowRight } from 'lucide-react';
 import Button from '@/components/global/Button';
 
-interface Banner {
-title:string;
-name:string;
-qualifications:string;
-headline:string;
-subtext:string;
-image:string;
-}
-export default function Hero() {
-const [banner, setBanner] = useState<Banner | null>(null);
-  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-    async function fetchBanner() {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_BASE}/api/pages`);
-            const data = await res.json();
-            if (data.banner) { 
-                setBanner(data.banner); 
-            }
-        } catch (error) {
-            console.error("Failed to fetch banner:", error);
-        } finally {
-            setLoading(false);
-        }
-    }
-    fetchBanner();
-}, []);
-
-  if (loading) return <div>Loading...</div>;
+export default function Hero({banner}:{banner:any}) {
   if (!banner) return null;
     return (
         <section id="home" className="relative w-full min-h-screen pt-32 pb-20 flex items-center bg-white overflow-hidden">
@@ -41,7 +13,7 @@ const [banner, setBanner] = useState<Banner | null>(null);
               <div
     className="absolute inset-0 bg-cover bg-center md:bg-right bg-no-repeat opacity-50 md:opacity-85"
     style={{ 
-        backgroundImage: `url('${banner.image}'), url('/hero-sec/soumya7.png')` 
+        backgroundImage: `url('${banner.image}')` 
     }}
 />
                 {/* Responsive gradient masks for text readability */}

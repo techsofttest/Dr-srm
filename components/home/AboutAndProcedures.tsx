@@ -103,17 +103,7 @@ function StatCard({ stat, idx }: { stat: StatData; idx: number }) {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export default function AboutAndProcedures() {
-    const [data, setData] = useState<PageData | null>(null);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
-            .then(res => res.json())
-            .then(json => setData(json))
-            .catch(err => console.error(err));
-    }, []);
-
-    if (!data) return <div className="py-24 text-center text-white">Loading...</div>;
+export default function AboutAndProcedures({about,metrics}:PageData) {
 
     return (
         <>
@@ -147,10 +137,10 @@ export default function AboutAndProcedures() {
                             <div className="relative">
                                 {/* Main image frame */}
                                 <div className="relative h-[500px] md:h-[580px] rounded-3xl overflow-hidden border border-slate-200">
-                                    {data.about.image && (
+                                    {about.image && (
                                         <Image
-                                            src={`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}${data.about.image}`}
-                                            alt={data.about.name}
+                                            src={`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}${about?.image}`}
+                                            alt={about?.name}
                                             fill
                                             sizes="(max-width: 1024px) 100vw, 40vw"
                                             className="object-cover object-top"
@@ -160,12 +150,13 @@ export default function AboutAndProcedures() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-deepNavy/70 via-transparent to-transparent" />
 
                                     {/* Name badge at bottom of image */}
+                                    {about.name && about.title && (
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="bg-white/10 backdrop-blur-md border border-white/30 rounded-xl px-4 py-3">
-                                            <p className="text-white font-bold text-sm">{data.about.name}</p>
-                                            <p className="text-tealAccent text-xs font-medium mt-0.5">{data.about.title}</p>
+                                           {about.name && ( <p className="text-white font-bold text-sm">{about?.name}</p>)}
+                                           {about.title && ( <p className="text-tealAccent text-xs font-medium mt-0.5">{about?.title}</p>)}
                                         </div>
-                                    </div>
+                                    </div>)}
                                 </div>
 
                                 {/* Floating credential badge — top right */}
@@ -223,17 +214,17 @@ export default function AboutAndProcedures() {
                                 Dedicated Expertise
                             </h2>
                             <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-8">
-                                {data.about.cms_title}<br className="hidden md:block" />
+                                {about?.cms_title}<br className="hidden md:block" />
                             </h3>
 
                             <div
                                 className="space-y-5 text-slate-700 text-sm sm:text-base leading-relaxed font-light mb-8"
-                                dangerouslySetInnerHTML={{ __html: data.about.content }}
+                                dangerouslySetInnerHTML={{ __html: about?.content }}
                             />
 
                             {/* Highlight Checklist */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
-                                {data.about.highlights.map((h, i) => (
+                                {about?.highlights.map((h, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ opacity: 0, x: -10 }}
@@ -290,20 +281,20 @@ export default function AboutAndProcedures() {
                     >
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 inline-flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent" />
-                            {data.metrics?.title}
+                            {metrics?.title}
                             <span className="w-12 h-[1px] bg-tealAccent" />
                         </h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-white leading-tight">
-                            {data.metrics?.heading}
+                            {metrics?.heading}
                         </h3>
                         <p className="mt-4 text-white/55 text-sm sm:text-base max-w-2xl mx-auto font-light">
-                            {data.metrics?.subtext}
+                            {metrics?.subtext}
                         </p>
                     </motion.div>
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {data.metrics?.stats?.map((stat, idx) => (
+                        {metrics?.stats?.map((stat, idx) => (
                             <StatCard key={idx} stat={stat} idx={idx} />
                         ))}
                     </div>

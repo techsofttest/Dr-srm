@@ -5,28 +5,8 @@ import { BookOpen, Award, ArrowUpRight, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-export default function AcademicInsights() {
-        const [academicData, setAcademicData] = useState<any>(null);
-     useEffect(() => {
-    async function fetchAcademic() {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/accademic`
-            );
+export default function AcademicInsights( {academicProfile,contact,education,observerships}:{observerships:any,contact:any,education:any,academicProfile:any}) {
 
-            const data = await res.json();
-
-            setAcademicData(data);
-        } catch (err) {
-            console.error("Error fetching academic data:", err);
-        }
-    }
-
-    fetchAcademic();
-}, []);
-const education = academicData?.education;
-const observerships = academicData?.observerships;
-const contact = academicData?.contact;
     return (
         <section id="academic-profile" className="relative w-full py-24 bg-white px-5 md:px-[80px] overflow-hidden border-b border-slate-200">
             <div className="max-w-[1600px] mx-auto relative z-10">
@@ -86,13 +66,13 @@ const contact = academicData?.contact;
                                     <GraduationCap className="w-6 h-6" />
                                 </div>
                                 <h4 className="text-xl font-serif font-bold text-deepNavy mb-3">
-                                    {observerships?.title}
+                                    {academicProfile?.title}
                                 </h4>
 
                                 <div
                                     className="text-slate-600 text-sm sm:text-base font-light leading-relaxed"
                                     dangerouslySetInnerHTML={{
-                                        __html: observerships?.description || '',
+                                        __html: academicProfile?.description || '',
                                     }}
                                 />
                             </div>

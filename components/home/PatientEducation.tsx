@@ -10,12 +10,6 @@ interface TopicData{
     content:string,
     href:string,
 }
-interface EduData{
-    span:string,
-    title:string,
-    description:string,
-    linkedin:string,
-}
 const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
         viewBox="0 0 24 24"
@@ -27,36 +21,16 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-export default function PatientEducation() {
-    const [topics, setTopics] = useState<TopicData[]>([]);
-    const [patientedu, setpatientedu] = useState<EduData | null>(null);
+export default function PatientEducation({topics,patientedu}:{topics:any[],patientedu:any}) {
     const [loading, setLoading] = useState(true);
 
-     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
-            .then(res => res.json())
-            .then(data => {
-                // Check if the data object has the 'casestudy' key
-                if (data.topics) {
-                    setTopics(data.topics);
-                    setpatientedu(data.patientedu);
-                } else {
-                    console.error("The 'casestudy' key was not found in the API response.");
-                }
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to fetch:", err);
-                setLoading(false);
-            });
-    }, []);
     return (
         <section id="patient-education" className="relative w-full py-24 bg-bgLight px-5 md:px-[80px] border-b border-slate-200">
             <div className="max-w-[1600px] mx-auto">
                 <div className="flex flex-col lg:flex-row gap-16 items-start">
 
                     {/* Left Panel: Introduction & LinkedIn CTA */}
-                    <div className="w-full lg:w-4/12 lg:sticky lg:top-36 self-start">
+                      <div className="w-full lg:w-4/12 lg:sticky lg:top-36 self-start">
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent"></span>
                            {patientedu?.span}

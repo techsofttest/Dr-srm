@@ -2,49 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface FaqItem {
-    question: string;
-    answer: string;
-}
-
-interface FaqHeaderData {
-    span: string;
-    title: string;
-    description: string;
-}
-
-export default function FAQ() {
-    const [faqList, setFaqList] = useState<FaqItem[]>([]);
+export default function FAQ({faq,faqdata}:{faq:any[],faqdata:any}) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
-    const [faqHeader, setFaqHeader] = useState<FaqHeaderData | null>(null);
 
     const toggleFAQ = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
-    useEffect(() => {
-        async function fetchFaq() {
-            try {
-                // Aligning environment variable usage with other components
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`);
-                const data = await res.json();
-                
-                if (data.faq && Array.isArray(data.faq)) {
-                    setFaqList(data.faq);
-                }
-                if (data.faqdata) {
-                    setFaqHeader(data.faqdata);
-                }
-            } catch (err) {
-                console.error("Error fetching faq:", err);
-            }
+        if (openIndex === index) {
+            setOpenIndex(null);
+        } else {
+            setOpenIndex(index);
         }
-        fetchFaq();
-    }, []);
-
+             };
+        
     return (
         <section id="faq" className="relative w-full py-24 bg-white px-5 md:px-[80px] border-b border-slate-200 overflow-hidden">
             {/* Background decorative image */}
@@ -62,20 +33,20 @@ export default function FAQ() {
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center justify-center gap-3">
                         <span className="w-12 h-[1px] bg-tealAccent"></span>
-                        {faqHeader?.span || "FAQ"}
+                        {faqdata?.span || "FAQ"}
                         <span className="w-12 h-[1px] bg-tealAccent"></span>
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                       {faqHeader?.title || "Frequently Asked Questions"}
+                       {faqdata?.title || "Frequently Asked Questions"}
                     </h3>
                     <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
-                        {faqHeader?.description || "Find clear answers regarding neurovascular procedures, recovery, and consultations."}
+                        {faqdata?.description || "Find clear answers regarding neurovascular procedures, recovery, and consultations."}
                     </p>
                 </div>
 
                 {/* Accordion List */}
                 <div className="space-y-4 max-w-4xl mx-auto">
-                    {faqList.map((faq, idx) => {
+                    {faq.map((faq, idx) => {
                         const isOpen = openIndex === idx;
                         return (
                             <div 
@@ -87,7 +58,7 @@ export default function FAQ() {
                                     className="w-full flex items-center justify-between p-6 text-left gap-4"
                                 >
                                     <span className="font-serif font-bold text-deepNavy text-base sm:text-lg hover:text-tealAccent transition-colors">
-                                        {faq.question}
+                                        {faq?.question}
                                     </span>
                                     <span className={`p-1.5 rounded-lg bg-tealAccent/10 text-tealAccent shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                                         <ChevronDown className="w-5 h-5" />
@@ -104,7 +75,7 @@ export default function FAQ() {
                                             className="overflow-hidden"
                                         >
                                             <div className="p-6 pt-0 border-t border-slate-200 text-sm sm:text-base text-slate-600 leading-relaxed font-light">
-                                                {faq.answer}
+                                                {faq?.answer}
                                             </div>
                                         </motion.div>
                                     )}

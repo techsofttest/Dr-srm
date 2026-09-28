@@ -6,28 +6,19 @@ import { Phone, Users, ShieldAlert, CheckCircle, ArrowRight } from 'lucide-react
 import { motion } from 'framer-motion';
 import Button from '@/components/global/Button';
 
-interface reffData{
-    title:string;
-    description:string;
-    refferal: string[];  
+interface ReferralItem {
+   reffering:{ type:string;
+    title: string;
+    sub_title?: string;
+    description: string;
+    refferal: string[];}[];
 }
+export default function ReferringDoctors({reffering}: ReferralItem) {
 
-export default function ReferringDoctors() {
-  const [reffering, setData] = useState<reffData[]>([]);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`)
-            .then(res => res.json())
-            .then(json => setData(json.reffering || []))
-            .catch(err => console.error(err));
-    }, []);
-
-    const getByTitle = (title: string) => reffering.find(item => item.title === title);
-
-    const intro = getByTitle("For Referring Doctors");
-    const commitment = getByTitle("Physician Communication Commitment");
-    const conditions = getByTitle("Common Referral Conditions");
-    const support = getByTitle("Referral Support");
+const intro = reffering.find(item => item.type === "intro");
+const commitment = reffering.find(item => item.type === "commitment");
+const conditions = reffering.find(item => item.type === "conditions");
+const support = reffering.find(item => item.type === "support");
 
     return (
         <section id="referring-doctors" className="relative w-full py-24 bg-deepNavy text-white px-5 md:px-[80px] overflow-hidden">
