@@ -53,7 +53,7 @@ async function getProcedureBySlug(
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/procedure/${slug}`,
             {
-                next: { revalidate: 3600 },
+                next: { revalidate: 60},
             }
         );
 

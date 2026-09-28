@@ -183,7 +183,7 @@ list:string;
 async function getHomeData(): Promise<Data | null> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pages`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {

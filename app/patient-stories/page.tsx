@@ -20,7 +20,7 @@ async function getReferringData(): Promise<CaseStudy | null> {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/testimony`,
             {
-                next: { revalidate: 3600 },
+                next: { revalidate: 60 },
             }
         );
 

@@ -45,12 +45,13 @@ export default function AboutHero({aboutHero}:{aboutHero:any}) {
                                     <div className="absolute inset-0 bg-gradient-to-t from-deepNavy/60 via-transparent to-transparent pointer-events-none" />
 
                                     {/* Name Tag */}
-                                    <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
-                                        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-3.5">
-                                            <p className="text-white font-bold text-base">{aboutHero?.name}</p>
-                                            <p className="text-white text-xs font-semibold mt-0.5">{aboutHero?.designation}</p>
+                                      {aboutHero.name && aboutHero.title && (
+                                    <div className="absolute bottom-6 left-6 right-6">
+                                        <div className="bg-white/10 backdrop-blur-md border border-white/30 rounded-xl px-4 py-3">
+                                           {aboutHero.name && ( <p className="text-white font-bold text-sm">{aboutHero?.name}</p>)}
+                                           {aboutHero.title && ( <p className="text-tealAccent text-xs font-medium mt-0.5">{aboutHero}</p>)}
                                         </div>
-                                    </div>
+                                    </div>)}
                                 </div>
                             </div>
                         </motion.div>

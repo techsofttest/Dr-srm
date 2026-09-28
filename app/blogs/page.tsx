@@ -31,7 +31,7 @@ async function getBlogData(): Promise<BlogResponse> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const res = await fetch(`${baseUrl}/blog`, {
-    next: { revalidate: 3600 }, 
+    next: { revalidate: 60}, 
   });
 
   if (!res.ok) {

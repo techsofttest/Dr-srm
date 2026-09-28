@@ -26,7 +26,7 @@ async function getReferringData(): Promise<Data | null> {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/condition`,
             {
-                next: { revalidate: 3600 },
+                next: { revalidate: 60 },
             }
         );
 

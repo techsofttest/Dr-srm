@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/contact`,
             {
-                next: { revalidate: 3600 },
+                next: { revalidate: 60 },
             }
         );
 
