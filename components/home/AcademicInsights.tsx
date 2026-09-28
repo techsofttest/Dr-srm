@@ -72,7 +72,7 @@ export default function AcademicInsights( {academicProfile,contact,education,obs
                                 <div
                                     className="text-slate-600 text-sm sm:text-base font-light leading-relaxed"
                                     dangerouslySetInnerHTML={{
-                                        __html: academicProfile?.description || '',
+                                        __html: academicProfile?.content || '',
                                     }}
                                 />
                             </div>
