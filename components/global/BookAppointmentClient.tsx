@@ -4,12 +4,98 @@ import React, { useState } from 'react';
 import InnerPageHero from '@/components/global/InnerPageHero';
 import Button from '@/components/global/Button';
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle2, Stethoscope } from 'lucide-react';
-
-export default function BookAppointmentClient() {
+interface TimeSlot {
+    date: string;
+    start_time: string;
+    end_time: string;
+}
+interface Data {
+contact: {   
+    phone: string;
+    email: string;
+    time_slots: TimeSlot[];
+}| undefined;
+}
+const DEFAULT_TIME_SLOTS = [
+    {
+        value: "Morning",
+        label: "Morning (9:00 AM - 12:00 PM)",
+    },
+    {
+        value: "Afternoon",
+        label: "Afternoon (1:00 PM - 4:00 PM)",
+    },
+    {
+        value: "Evening",
+        label: "Evening (4:00 PM - 7:00 PM)",
+    },
+];
+export default function BookAppointmentClient({contact}:Data) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+const [selectedDate, setSelectedDate] = useState("");
+const [selectedTime, setSelectedTime] = useState("");
+
+const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+const rawTimeSlots = contact?.time_slots || [];
+const validTimeSlots = rawTimeSlots.filter((slot) => !slot.date || slot.date >= today);
+
+const selectedDay = selectedDate
+    ? new Date(`${selectedDate}T00:00:00`).getDay()
+    : null;
+
+const customSlotsForDate = validTimeSlots.filter(
+    (slot) => slot.date === selectedDate
+);
+
+const isSunday = selectedDay === 0;
+
+// Helper to check if a time string falls within an hour range
+const isWithinRange = (timeStr: string, startHour: number, endHour: number) => {
+    if (!timeStr) return false;
+    const hour = parseInt(timeStr.split(":")[0], 10);
+    return hour >= startHour && hour < endHour;
+};
+
+// Generate slots dynamically based on the doctor's custom start/end time for that day
+const getAvailableSlotsForDate = () => {
+    if (customSlotsForDate.length === 0) return DEFAULT_TIME_SLOTS;
+
+    const generatedSlots: { value: string; label: string }[] = [];
+
+    customSlotsForDate.forEach((slot) => {
+        const startH = parseInt(slot.start_time.split(":")[0], 10);
+        const endH = parseInt(slot.end_time.split(":")[0], 10);
+
+        // Define standard split windows
+        const windows = [
+            { name: "Morning", labelStart: "9:00 AM", labelEnd: "12:00 PM", min: 9, max: 12 },
+            { name: "Afternoon", labelStart: "1:00 PM", labelEnd: "4:00 PM", min: 13, max: 16 },
+            { name: "Evening", labelStart: "4:00 PM", labelEnd: "7:00 PM", min: 16, max: 19 },
+        ];
+
+        windows.forEach((win) => {
+            // Check if the doctor's availability overlaps with this window
+            if (startH < win.max && endH > win.min) {
+                generatedSlots.push({
+                    value: `${win.name} (${slot.start_time}-${slot.end_time})`,
+                    label: `${win.name} (${win.labelStart} - ${win.labelEnd})`,
+                });
+            }
+        });
+    });
+
+    return generatedSlots;
+};
+
+const availableSlots = isSunday
+    ? []
+    : customSlotsForDate.length > 0
+        ? getAvailableSlotsForDate()
+        : []; 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -144,26 +230,60 @@ export default function BookAppointmentClient() {
                                     </div>
                                     {/* Preferred Date */}
                                     <div>
-                                        <label className="block text-sm font-bold text-deepNavy mb-2">Preferred Date *</label>
+                                        <label className="block text-sm font-bold text-deepNavy mb-2">
+                                            Preferred Date *
+                                        </label>
+
                                         <div className="relative">
                                             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                                            <input type="date" name="date" required className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700" />
+
+                                            <input
+                                                type="date"
+                                                name="date"
+                                                required
+                                                value={selectedDate}
+                                                min={new Date().toISOString().split("T")[0]}
+                                                onChange={(e) => {
+                                                    setSelectedDate(e.target.value);
+                                                    setSelectedTime("");
+                                                }}
+                                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700"
+                                            />
                                         </div>
                                     </div>
                                     {/* Preferred Time */}
-                                    <div>
-                                        <label className="block text-sm font-bold text-deepNavy mb-2">Preferred Time *</label>
+                                  <div>
+                                        <label className="block text-sm font-bold text-deepNavy mb-2">
+                                            Preferred Time *
+                                        </label>
+
                                         <div className="relative">
                                             <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+
                                             <select
-                                                required name="time"
-                                                defaultValue=""
-                                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none"
+                                                required
+                                                name="time"
+                                                value={selectedTime}
+                                                onChange={(e) => setSelectedTime(e.target.value)}
+                                                disabled={!selectedDate || availableSlots.length === 0}
+                                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-tealAccent focus:ring-1 focus:ring-tealAccent transition-all text-sm text-slate-700 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                <option value="" disabled>Select Time Slot</option>
-                                                <option value="Morning">Morning (9:00 AM - 12:00 PM)</option>
-                                                <option value="Afternoon">Afternoon (1:00 PM - 4:00 PM)</option>
-                                                <option value="Evening">Evening (4:00 PM - 7:00 PM)</option>
+                                                <option value="" disabled>
+                                                    {!selectedDate
+                                                        ? "Select Time Slot"
+                                                        : availableSlots.length === 0
+                                                            ? "Doctor Unavailable"
+                                                            : "Select Time Slot"}
+                                                </option>
+
+                                                {availableSlots.map((slot, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={slot.value}
+                                                    >
+                                                        {slot.label}
+                                                    </option>
+                                                ))}
                                             </select>
                                         </div>
                                     </div>

@@ -28,30 +28,30 @@ export default function Hero({banner}:{banner:any}) {
             <div className="relative z-10 w-full max-w-[1600px] mx-auto px-5 md:px-[80px]">
                 <div className="max-w-4xl flex flex-col items-start animate-in fade-in slide-in-from-left-8 duration-1000">
 
-                    {/* Specialty Subtitle */}
+                    {/* Specialty Subtitle */}{banner.title && 
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-tealAccent/10 border border-tealAccent/40 text-tealAccent font-bold text-xs uppercase tracking-wider mb-6">
                         <span>{banner.title}</span>
-                    </div>
+                    </div>}
 
-                    {/* Dr. Malla Name */}
+                    {/* Dr. Malla Name */}{banner.name && 
                     <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif text-deepNavy tracking-tight leading-[1.05] mb-4">
                        {banner.name}
-                    </h1>
+                    </h1>}
 
-                    {/* Qualifications Block */}
+                    {/* Qualifications Block */}{banner.qualifications && 
                     <p className="text-xs sm:text-sm md:text-base text-tealAccent font-semibold tracking-wide border-l-2 border-tealAccent pl-3 mb-6 max-w-3xl leading-relaxed">
                         {banner.qualifications}
-                    </p>
+                    </p>}
 
-                    {/* Main Headline */}
+                    {/* Main Headline */}{banner.headline && 
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-serif text-deepNavy tracking-tight leading-snug mb-4 max-w-3xl">
                        {banner.headline}
-                    </h2>
+                    </h2>}
 
-                    {/* Detailed Subtext */}
+                    {/* Detailed Subtext */}{banner.subtext && 
                     <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mb-10 font-light">
                        {banner.subtext}
-                    </p>
+                    </p>}
 
                     {/* Three-Button CTA Layout — Boxed, Full-Width, Animated */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 w-full gap-0 overflow-hidden rounded-xl border border-slate-300 mt-2">

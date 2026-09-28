@@ -2,36 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
-interface CaseStudy {
-    sub_title: string;
-    title: string;
-    description: string;
-    patient: string; 
-}
 
-export default function CaseReviews() {
-    const [story, setCaseStudies] = useState<CaseStudy[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/testimony`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.story) {
-                    setCaseStudies(data.story);
-                } else {
-                    console.error("The 'story' key was not found in the API response.");
-                }
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error("Failed to fetch:", err);
-                setLoading(false);
-            });
-    }, []);
-
-    if (loading) return null; // Or a skeleton loader
-
+export default function CaseReviews({story}:{story:any[]}) {
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
             {/* Background elements remain the same */}

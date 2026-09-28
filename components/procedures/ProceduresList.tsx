@@ -10,7 +10,7 @@ const iconMap: Record<string, React.ElementType> = {
     ShieldAlert, Cpu, HeartPulse, HelpCircle, Activity, Monitor,
 };
 interface ProceduresList {
-    id: number;
+    proceduresList:{id: number;
     slug: string;
     listingTitle: string;
     listingDescription: string; // Used in place of 'items'
@@ -18,25 +18,10 @@ interface ProceduresList {
     image: string;
     listingActionText: string;
     icon:string
+}[];
 }
 
-export default function ProceduresList() {
-     const [proceduresList, setProceduresList] = useState<ProceduresList[]>([]);
-        
-            useEffect(() => {
-                async function fetchServices() {
-                    try {
-                        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/procedure`);
-                        const data = await res.json();
-                        if (data.procedure && Array.isArray(data.procedure)) {
-                            setProceduresList(data.procedure);
-                        }
-                    } catch (err) {
-                        console.error("Error fetching condition:", err);
-                    }
-                }
-                fetchServices();
-            }, []);
+export default function ProceduresList({proceduresList}:ProceduresList) {
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
             {/* Background Saturated Radial Gradients & Spheres */}

@@ -3,36 +3,22 @@
 import React, { useEffect, useState } from 'react';
 import { Globe, Shield } from 'lucide-react';
 
-interface AffiliationItem {
-    name: string;
-    short: string;
-}
-
 interface AffiliationData {
     heading: string;
-    international: AffiliationItem[];
-    national: AffiliationItem[];
+    international: {
+        name: string;
+        short: string;
+    }[];
+    national: {
+        name: string;
+        short: string;
+    }[];
 }
-export default function ProfessionalAffiliations() {
-   const [affiliation, setAffiliations] = useState<AffiliationData>({
-    heading: '',
-    international: [],
-    national: [],
-});
-useEffect(() => {
-                fetch(`${process.env.NEXT_PUBLIC_API_URL}/about`)
-                    .then((res) => res.json())
-                    .then((data) => {
-                        setAffiliations(
-                            data.affiliation || {
-                                heading: '',
-                                international: [],
-                                national: [],
-                            }
-                        );
-                    })
-                    .catch(console.error);
-            }, []);
+interface ProfessionalAffiliationsProps {
+    affiliation: AffiliationData;
+}
+
+export default function ProfessionalAffiliations({ affiliation,}: ProfessionalAffiliationsProps) {
    
     return (
         <section className="relative w-full py-24 bg-white px-5 md:px-[80px] overflow-hidden border-b border-slate-100">
@@ -44,7 +30,7 @@ useEffect(() => {
                         Global &amp; National Memberships
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                       {affiliation.heading}
+                       {affiliation?.heading}
                     </h3>
                 </div>
 
@@ -52,7 +38,7 @@ useEffect(() => {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
                     {/* International Card (Spans 1 Column on desktop) */}
-                    {affiliation.international.map((item, idx) => (
+                    {affiliation?.international?.map((item, idx) => (
                             <div
                                 key={idx}
                                 className="lg:col-span-1 bg-white border border-slate-200/80 rounded-2xl p-8 hover:border-tealAccent/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
@@ -82,7 +68,7 @@ useEffect(() => {
 
                         {/* National 1 */}
                         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {affiliation.national.map((item, idx) => (
+                            {affiliation?.national?.map((item, idx) => (
                                 <div
                                     key={idx}
                                     className="bg-white border border-slate-200/80 rounded-2xl p-8 hover:border-tealAccent/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"

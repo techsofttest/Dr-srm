@@ -14,39 +14,7 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
         <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
     </svg>
 );
-interface TopicData{
-    type:string,
-    title:string,
-    content:string,
-    href:string,
-}
-interface patientPage{
-    span:string,
-    title:string,
-    description:string,
-    linkedin:string,
-}
-export default function ResourceGrid() {
-    const [patient, setTopics] = useState<TopicData[]>([]);
-    const [patientpage, setpatient] = useState<patientPage | null>(null);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/patienteducation`)
-                .then(res => res.json())
-                .then(data => {
-                      setpatient(data.patientpage);
-                    if (data.patient) {
-                        setTopics(data.patient);
-                    } else {
-                        console.error("The 'casestudy' key was not found in the API response.");
-                    }
-                    setLoading(false);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch:", err);
-                    setLoading(false);
-                });
-        }, []);
+export default function ResourceGrid({patient,patientedu}:{patient:any[],patientedu:any}) {
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-clip">
             {/* Background Saturated Radial Gradients & Spheres */}
@@ -61,15 +29,15 @@ export default function ResourceGrid() {
                     <div className="w-full lg:w-4/12 lg:sticky lg:top-36 self-start">
                         <h2 className="text-xs font-bold tracking-[0.2em] text-tealAccent uppercase mb-3 flex items-center gap-3">
                             <span className="w-12 h-[1px] bg-tealAccent"></span>
-                           {patientpage?.span}
+                           {patientedu?.span}
                         </h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight mb-6">
-                            {patientpage?.title}
+                            {patientedu?.title}
                         </h3>
-                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">{patientpage?.description}</p>
+                        <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-light">{patientedu?.content}</p>
 
                         <a
-                            href={patientpage?.linkedin}
+                            href={patientedu?.linkedin}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-deepNavy border border-[#1E2E4D] hover:bg-[#1E2E4D] hover:border-tealAccent text-white font-bold text-xs tracking-wider transition-all uppercase w-full"

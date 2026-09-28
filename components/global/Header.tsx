@@ -26,16 +26,20 @@ import {
 import Button from '@/components/global/Button';
 import WhatsAppIcon from '@/components/global/WhatsAppIcon';
 
-interface ContactData{
+interface LayoutData {
+  contact: {
     place: string;
+    address: string;
     location: string;
     phone: string;
     email: string;
     whatsapp: string;
     linkedin: string;
     orcid: string;
-    available: string;
-};
+  };
+  conditions: { name: string; slug: string }[];
+  procedure: { name: string; slug: string }[];
+}
 // ── Navigation Data ───────────────────────────────────────────────────────────
 
 
@@ -48,14 +52,16 @@ const layer3Nav = [
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
+interface HeaderProps {
+  data: LayoutData;
+}
+export default function Header({ data }: HeaderProps) {
+    const conditions = Array.isArray(data?.conditions) ? data.conditions : [];
+    const procedures = Array.isArray(data?.procedure) ? data.procedure : [];
 
-export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-   const [conditions, setConditions] = useState([]);
-    const [procedure, setProcedures] = useState([]);   
-    const [contact, setContact] = useState<ContactData | null>(null);
 
     const layer2Nav = [
         {
@@ -68,7 +74,7 @@ export default function Header() {
             href: '/about',
             icon: UserRound,
         },
-        {
+         {
             name: 'Conditions',
             href: '/conditions',
             icon: HeartPulse,
@@ -81,21 +87,12 @@ export default function Header() {
             name: 'Procedures',
             href: '/procedures',
             icon: Activity,
-            children: procedure.map((item: any) => ({
+            children: procedures.map((item: any) => ({
                 name: item.name,
                 href: `/procedures/${item.slug}`,
             })),
         },
     ];
-   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/layout`)
-        .then(res => res.json())
-        .then(data => {
-            setConditions(data.conditions || []);
-            setProcedures(data.procedure || []);
-            setContact(data.contact || null);
-        });
-}, []);
     useEffect(() => {
         const onScroll = () => setIsScrolled(window.scrollY > 30);
         window.addEventListener('scroll', onScroll);
@@ -123,35 +120,35 @@ export default function Header() {
                     {/* Left — contact */}
                     <div className="flex items-center gap-5">
                         <a
-                            href={`tel:${contact?.phone || ''}`}
+                            href={`tel:${data.contact?.phone || ''}`}
                             className="flex items-center gap-1.5 hover:text-tealAccent transition-colors"
                         >
                             <Phone className="w-3 h-3 text-tealAccent" />
-                            <span>{contact?.phone}</span>
+                            <span>{data.contact?.phone}</span>
                         </a>
 
                         <span className="text-white/15">|</span>
 
                         <a
-                            href={`mailto:${contact?.email || ''}`}
+                            href={`mailto:${data.contact?.email || ''}`}
                             className="flex items-center gap-1.5 hover:text-tealAccent transition-colors"
                         >
                             <Mail className="w-3 h-3 text-tealAccent" />
-                            <span>{contact?.email}</span>
+                            <span>{data.contact?.email}</span>
                         </a>
 
                         <span className="text-white/15">|</span>
 
                         <span className="flex items-center gap-1.5">
                             <MapPin className="w-3 h-3 text-tealAccent" />
-                            <span>{contact?.place}</span>
+                            <span>{data.contact?.place || ""}</span>
                         </span>
                     </div>
 
                     {/* Right — actions */}
                     <div className="flex items-center gap-5">
                         <a
-                            href={contact?.whatsapp}
+                            href={data.contact?.whatsapp}
                             target="_blank"
                             rel="noreferrer"
                             className="flex items-center gap-1.5 hover:text-tealAccent transition-colors"
@@ -305,7 +302,7 @@ export default function Header() {
                     {/* Right side tag line */}
                     <div className="flex items-center gap-2 text-[11px] text-white/40 italic">
                         <AlertCircle className="w-3 h-3 text-amber-400/60" />
-                        <span>Interventional Neuroradiologist · {contact?.place}</span>
+                        <span>Interventional Neuroradiologist · {data.contact?.place}</span>
                     </div>
                 </div>
             </div>
@@ -393,14 +390,14 @@ export default function Header() {
                     {/* Mobile quick actions */}
                     <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-white/10">
                         <a
-                            href={`tel:${contact?.phone}`}
+                            href={`tel:${data.contact?.phone}`}
                             className="flex items-center justify-center gap-2.5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm transition-colors border border-white/10"
                         >
                             <Phone className="w-4 h-4 text-tealAccent" />
-                            Call: {contact?.phone}
+                            Call: {data.contact?.phone}
                         </a>
                         <a
-                            href={contact?.whatsapp}
+                            href={data.contact?.whatsapp}
                             target="_blank"
                             rel="noreferrer"
                             className="flex items-center justify-center gap-2.5 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-sm transition-colors border border-white/10"

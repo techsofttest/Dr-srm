@@ -2,30 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, FileSearch, HelpCircle } from 'lucide-react';
-
 interface ReferralSection {
     title: string;
     sub_title: string;
     description: string;
     points: string[];
 }
+interface Data {
+    conditions: ReferralSection;
+    support:ReferralSection;
+}
 
-export default function ReferralScope() {
-    const [conditions, setConditions] = useState<ReferralSection | null>(null);
-    const [support, setSupport] = useState<ReferralSection | null>(null);
 
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/reffering`)
-            .then((res) => res.json())
-            .then((data) => {
-                // Mapping the array indices to your state
-                setConditions(data.referral_points[0]);
-                setSupport(data.referral_points[1]);
-            })
-            .catch(console.error);
-    }, []);
-
-    // Guard clause to prevent rendering while data is loading
+export default function ReferralScope({conditions,support}:Data) {
     if (!conditions || !support) return null;
 
     return (

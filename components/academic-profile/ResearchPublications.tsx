@@ -5,28 +5,7 @@ import { BookOpen, ArrowUpRight } from 'lucide-react';
 
 
 
-export default function ResearchPublications() {
-    const [academicData, setAcademicData] = useState<any>(null);
-
-useEffect(() => {
-    async function fetchAcademic() {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/accademic`
-            );
-
-            const data = await res.json();
-
-            setAcademicData(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    fetchAcademic();
-}, []);
-const observerships = academicData?.observerships;
-const contact = academicData?.contact;
+export default function ResearchPublications({observerships,contact}:{observerships:any,contact:any}) {
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] overflow-hidden">
             {/* Background Saturated Radial Gradients & Spheres */}
@@ -67,7 +46,7 @@ const contact = academicData?.contact;
                         <div className="flex flex-wrap items-center gap-3">
                              {contact?.research && (
                                     <a
-                                        href={contact.research}
+                                        href={contact?.research}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-zinc-300 bg-white text-xs font-semibold"
@@ -79,7 +58,7 @@ const contact = academicData?.contact;
 
                                 {contact?.orcid && (
                                     <a
-                                        href={contact.orcid}
+                                        href={contact?.orcid}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-zinc-300 bg-white text-xs font-semibold"
@@ -90,7 +69,7 @@ const contact = academicData?.contact;
                                 )}
                                  {contact?.googleScholar && (
                             <a 
-                                href={contact.googleScholar} 
+                                href={contact?.googleScholar} 
                                 target="_blank" 
                                 rel="noreferrer" 
                                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-zinc-300 bg-white text-xs font-semibold text-slate-600 hover:border-tealAccent hover:text-tealAccent hover:bg-tealAccent/[0.02] transition-colors"

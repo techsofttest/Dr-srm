@@ -4,14 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-export default function AboutHero() {
-    const [aboutHero, setAboutHero] = useState<any>(null);
-     useEffect(() => {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/about`) // Adjust endpoint if needed
-                .then(res => res.json())
-                .then(json => setAboutHero(json.aboutHero))
-                .catch(err => console.error("Failed to fetch contact data", err));
-        }, []);
+export default function AboutHero({aboutHero}:{aboutHero:any}) {
+
     return (
         <section className="relative w-full pt-40 pb-24 md:pt-48 md:pb-28 bg-white px-5 md:px-[80px] overflow-clip border-b border-slate-100">
             {/* Background decorative elements */}

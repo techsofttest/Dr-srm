@@ -114,7 +114,6 @@ export default async function BlogDetailPage({
 
   return (
     <> 
-    <Header />
       <main className="relative min-h-screen flex flex-col bg-white">
       {/* Blog Article */}
       <BlogArticle post={data.blog} contact={data.contact} />

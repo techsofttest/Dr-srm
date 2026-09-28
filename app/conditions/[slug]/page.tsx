@@ -105,7 +105,6 @@ export default async function ConditionDetailPage({
 
     return (
         <>
-            <Header />
             <ConditionDetailClient />
         </>
     );

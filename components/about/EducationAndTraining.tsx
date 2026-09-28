@@ -3,39 +3,40 @@
 import React, { useEffect, useState } from 'react';
 import { GraduationCap, Award } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+interface EducationItem {
+    level: string;
+    degree: string;
+    institution: string;
+    description: string;
+}
 
-export default function EducationAndTraining() {
-    const [education, setEducation] = useState({
-    cms_title: '',
-    items: [],
-});
+interface EducationData {
+    cms_title: string;
+    items: EducationItem[];
+}
 
-const [observerships, setObserverships] = useState({
-    cms_title: '',
-    items: [],
-});
+interface ObservershipItem {
+    title: string;
+    institution: string;
+    description: string;
+}
+
+interface ObservershipData {
+    cms_title: string;
+    items: ObservershipItem[];
+}
+
+interface EducationAndTrainingProps {
+    education?: EducationData;
+    observerships?: ObservershipData;
+}
+export default function EducationAndTraining({education,observerships}:EducationAndTrainingProps) {
     const timelineRef = React.useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: timelineRef,
         offset: ['start 0.8', 'end 0.2'],
     });
     const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-        useEffect(() => {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/about`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setEducation(data.education || {
-                        cms_title: '',
-                        items: [],
-                    });
-
-                    setObserverships(data.observerships || {
-                        cms_title: '',
-                        items: [],
-                    });
-                })
-                .catch(console.error);
-        }, []);
     return (
         <section className="relative w-full py-24 bg-bgLight px-5 md:px-[80px] overflow-hidden border-b border-slate-200">
             {/* Subtle visual break glow */}
@@ -49,7 +50,7 @@ const [observerships, setObserverships] = useState({
                         Academic Pedigree
                     </h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif text-deepNavy leading-tight">
-                        {education.cms_title}
+                        {education?.cms_title}
                     </h3>
                 </div>
 
@@ -73,7 +74,7 @@ const [observerships, setObserverships] = useState({
                                     style={{ height: lineHeight }}
                                 />
 
-                                    {education.items?.map((item: any, idx: number) => (
+                                    {(education?.items??[]).map((item: any, idx: number) => (
                                         <div key={idx} className="relative">
                                             <div className="absolute -left-10 top-1 w-4 h-4 rounded-full bg-white border-4 border-tealAccent z-10" />
 
@@ -103,12 +104,12 @@ const [observerships, setObserverships] = useState({
                         <div className="bg-white border border-slate-200/80 rounded-2xl p-8 h-full flex flex-col">
                             <h4 className="text-xs font-bold tracking-[0.15em] text-tealAccent uppercase mb-6 flex items-center gap-2">
                             <Award className="w-4 h-4" />
-                            {observerships.cms_title}
+                            {observerships?.cms_title}
                         </h4>
 
                             <div className="flex-1 flex flex-col gap-6">
                                 {/* Observership 1 */}
-                               {observerships.items?.map((item: any, idx: number) => (
+                               {(observerships?.items??[]).map((item: any, idx: number) => (
                                         <div
                                             key={idx}
                                             className="p-6 bg-bgLight rounded-xl border border-slate-200 hover:border-tealAccent/45 hover:-translate-y-1 transition-all duration-300 flex-1 flex flex-col justify-center"

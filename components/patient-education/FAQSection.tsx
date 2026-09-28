@@ -9,29 +9,12 @@ interface faqData{
     answer:string;
 }
 
-export default function FAQSection() {
+export default function FAQSection({faqs}:{faqs:any[]}) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     const toggleFAQ = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
-       const [faqs, setPro] = useState<faqData[]>([]);
-    
-               useEffect(() => {
-                   async function fetchFaq() {
-                       try {
-                           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/patienteducation`);
-                           const data = await res.json();
-                           // Extracting 'services' from the consolidated page data object
-                           if (data.faqs && Array.isArray(data.faqs)) {
-                               setPro(data.faqs);
-                           }
-                       } catch (err) {
-                           console.error("Error fetching faqs:", err);
-                       }
-                   }
-                   fetchFaq();
-               }, []);
 
     return (
         <section className="relative w-full py-24 md:py-32 bg-white px-5 md:px-[80px] overflow-hidden">

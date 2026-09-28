@@ -7,33 +7,18 @@ import {
 import Link from 'next/link';
 
 interface ServiceCategory {
-    id: number;
+condition:{    id: number;
     slug: string;
     listingTitle: string;
     listingSubtitle: string;
-    listingDescription: string; // Used in place of 'items'
+    listingDescription: string; 
     image: string;
     listingActionText: string;
+}[];
 }
 
 
-export default function ConditionsGrid() {
-      const [condition, setCategories] = useState<ServiceCategory[]>([]);
-    
-        useEffect(() => {
-            async function fetchServices() {
-                try {
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/condition`);
-                    const data = await res.json();
-                    if (data.condition && Array.isArray(data.condition)) {
-                        setCategories(data.condition);
-                    }
-                } catch (err) {
-                    console.error("Error fetching condition:", err);
-                }
-            }
-            fetchServices();
-        }, []);
+export default function ConditionsGrid({condition}:ServiceCategory) {
     return (
         <section className="relative w-full py-24 md:py-32 bg-zinc-50 px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
             {/* Background Saturated Radial Gradients & Spheres */}

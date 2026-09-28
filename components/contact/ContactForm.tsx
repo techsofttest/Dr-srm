@@ -137,14 +137,21 @@ export default function ContactForm() {
                                 <label htmlFor="phone" className="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">
                                     Phone Number <span className="text-red-500">*</span>
                                 </label>
-                                <input 
-                                    type="tel" 
-                                    id="phone"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter your phone number"
-                                    className={`w-full border ${errors.phone ? 'border-red-400 focus:border-red-500' : 'border-zinc-200 focus:border-tealAccent'} rounded-xl px-4 py-3 bg-white text-slate-800 text-sm focus:outline-none transition-colors font-light`}
+                               <input
+                                    type="tel"  id="phone"  name="phone" inputMode="numeric" pattern="[0-9]*" maxLength={10}  value={formData.phone}
+                                    onChange={(e) => {
+                                        const numbersOnly = e.target.value.replace(/\D/g, '');
+
+                                        setFormData({
+                                            ...formData,
+                                            phone: numbersOnly,
+                                        });
+                                    }} placeholder="Enter your phone number"
+                                    className={`w-full border ${
+                                        errors.phone
+                                            ? 'border-red-400 focus:border-red-500'
+                                            : 'border-zinc-200 focus:border-tealAccent'
+                                    } rounded-xl px-4 py-3 bg-white text-slate-800 text-sm focus:outline-none transition-colors font-light`}
                                 />
                                 {errors.phone && <p className="text-[11px] text-red-500 font-medium">{errors.phone}</p>}
                             </div>

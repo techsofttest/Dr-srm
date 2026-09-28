@@ -29,16 +29,10 @@ const footerNavLinks = [
     { name: 'Contact', href: '/contact' },
      { name: 'Blog', href: '/blogs' },
 ];
-
-export default function Footer() {
-    const [data, setData] = useState<FooterData | null>(null);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/layout`) // Ensure this matches your route
-            .then((res) => res.json())
-            .then(setData)
-            .catch(console.error);
-    }, []);
+interface FooterProps {
+  data: FooterData;
+}
+export default function Footer({data}:FooterProps) {
 
     if (!data) return null;
     return (
@@ -48,12 +42,12 @@ export default function Footer() {
                 <div className="w-full py-4 border-b border-white/10 mb-12 flex flex-wrap items-center justify-between gap-4 text-xs md:text-sm font-medium text-white/70">
                     <span className="text-tealAccent font-bold uppercase tracking-wider">Areas of Focus:</span>
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
-                        {data.conditions.map((item, idx) => (
+                        {data?.conditions?.map((item, idx) => (
                             <Link key={`cond-${idx}`} href={`/conditions/${item.slug}`} className="hover:text-tealAccent transition-colors">
                                {idx > 0 && <span className="text-white/20">•</span>}  {item.name}
                             </Link>
                         ))}
-                        {data.procedure.map((item, idx) => (
+                        {data?.procedure?.map((item, idx) => (
                             <Link key={`proc-${idx}`} href={`/procedures/${item.slug}`} className="hover:text-tealAccent transition-colors">
                                 {idx > 0 && <span className="text-white/20">•</span>} {item.name}
                             </Link>
@@ -115,18 +109,16 @@ export default function Footer() {
                                 <div className="text-white/70">
                                     {/* The Bold Header */}
                                     <strong className="text-white block font-medium">
-                                        {data.contact.place}
+                                        {data?.contact?.place}
                                     </strong>
 
                                     {/* The Remaining Address */}
-                                    <span className="text-sm font-light leading-relaxed">
-                                        {data.contact.address.replace(data.contact.place, '').trim()}
-                                    </span>
+                                    <span className="text-sm font-light leading-relaxed" dangerouslySetInnerHTML={{__html:data.contact.address.replace(data.contact.place, '').trim()}} />
                                 </div>
 
                             </div>
                             <a
-                                href={data.contact?.location}
+                                href={data?.contact?.location}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-tealAccent uppercase hover:underline underline-offset-4 mt-1"
@@ -142,17 +134,17 @@ export default function Footer() {
                             Contact Info
                         </h4>
                         <div className="flex flex-col gap-4 text-sm">
-                            <a href={`tel:${data.contact.phone}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors">
+                            <a href={`tel:${data?.contact?.phone}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors">
                                 <Phone className="w-4 h-4 text-tealAccent shrink-0" />
-                                <span>{data.contact.phone}</span>
+                                <span>{data?.contact?.phone}</span>
                             </a>
-                            <a href={`mailto:${data.contact.email}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors break-all">
+                            <a href={`mailto:${data?.contact?.email}`} className="flex items-center gap-2.5 text-white hover:text-tealAccent transition-colors break-all">
                                 <Mail className="w-4 h-4 text-tealAccent shrink-0" />
-                                <span>{data.contact.email}</span>
+                                <span>{data?.contact?.email}</span>
                             </a>
                             <div className="flex gap-4 mt-2">
                                 <a
-                                    href={data.contact.linkedin}
+                                    href={data?.contact?.linkedin}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="text-xs font-bold tracking-wider text-white/60 hover:text-white uppercase transition-colors"
@@ -161,7 +153,7 @@ export default function Footer() {
                                 </a>
                                 <span className="text-white/20">|</span>
                                 <a
-                                    href={data.contact.orcid}
+                                    href={data?.contact?.orcid}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="text-xs font-bold tracking-wider text-white/60 hover:text-white uppercase transition-colors"

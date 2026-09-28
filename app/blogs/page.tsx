@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import BlogGrid from "@/components/blog/BlogGrid";
-import Header from '@/components/global/Header';
 import InnerPageHero from '@/components/global/InnerPageHero';
 interface BlogItem {
   id: number;
@@ -68,14 +67,15 @@ export default async function BlogsPage() {
   }
 
   return (
-    <> <Header />
+    <> 
    <InnerPageHero
                 title="Blog"
                 category="Educational Hub"
             />
       {/* Main Blogs Area */}
+      {data?.blog &&(
       <BlogGrid posts={data?.blog ?? []} />
-
+)}
     </>
   );
 }

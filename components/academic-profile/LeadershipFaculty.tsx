@@ -3,29 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Award, GraduationCap } from 'lucide-react';
 
-export default function LeadershipFaculty() {
-    const [academicData, setAcademicData] = useState<any>(null);
-
-    useEffect(() => {
-        async function fetchAcademic() {
-            try {
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/accademic`
-                );
-
-                const data = await res.json();
-
-                setAcademicData(data);
-            } catch (err) {
-                console.error('Error fetching academic data:', err);
-            }
-        }
-
-        fetchAcademic();
-    }, []);
-
-    const academicProfile = academicData?.academicProfile;
-    const education = academicData?.education;
+export default function LeadershipFaculty({academicProfile,education}:{academicProfile:any,education:any}) {
 
     return (
         <section className="relative w-full py-24 md:py-32 bg-white px-5 md:px-[80px] border-b border-zinc-200 overflow-hidden">
