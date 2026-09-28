@@ -78,7 +78,7 @@ export default function EmergencyBanner({emergency}:{emergency:any}) {
                             className="w-full lg:w-auto"
                         >
                             <PhoneCall className="w-4 h-4" />
-                            <span>{emergency.link.text}</span>
+                            <span dangerouslySetInnerHTML={{__html:emergency.link.text}} />
                         </Button>
                     </div>
                 </motion.div>

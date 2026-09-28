@@ -78,7 +78,7 @@ export default function AboutHero({aboutHero}:{aboutHero:any}) {
                             </p>
                             <div className="space-y-6 text-slate-600 text-sm sm:text-base leading-relaxed font-light">
                                     {aboutHero?.content?.map((paragraph: string, index: number) => (
-                                        <p key={index}>{paragraph}</p>
+                                        <p key={index} dangerouslySetInnerHTML={{__html:paragraph}} />
                                     ))}
                                 </div>
                         </div>
