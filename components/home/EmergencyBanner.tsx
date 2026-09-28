@@ -66,10 +66,7 @@ export default function EmergencyBanner({emergency}:{emergency:any}) {
                             <h3 className="text-base sm:text-lg md:text-xl font-bold font-serif tracking-wide mb-2 uppercase leading-snug">
                                 {emergency.title}
                             </h3>
-                            <p className="text-xs sm:text-sm md:text-base text-white/90 leading-relaxed font-light">
-                                {emergency.content}
-                            
-                            </p>
+                            <div className="text-xs sm:text-sm md:text-base text-white/90 leading-relaxed font-light"dangerouslySetInnerHTML={{__html:emergency.content}} />
                         </div>
                     </div>
 
